@@ -8,5 +8,7 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . Common $workingDir
 
 
-. $workingDir"Sql\MigrateBuddyDb.ps1"
-MigrateBuddyDb
+. $workingDir"Sql\AddDbToAvailabilityGroup.ps1"
+#AddDbToAvailabilityGroup "BuddyObjects-Test-BRADLEYSERB1"
+
+AddDbToAvailabilityGroup "BuddyObjects-Queue-Test-BRADLEYSERB1"

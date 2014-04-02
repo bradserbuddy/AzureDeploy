@@ -1,6 +1,5 @@
-﻿function MigrateBuddyDb()
+﻿function AddDbToAvailabilityGroup($databaseName)
 {
-    $databaseName = "BuddyObjects-Test-BRADLEYSERB1"
     $backupShare = "\\$sql1ServerName\backup"
     $quorumShare = "\\$sql1ServerName\quorum"
 

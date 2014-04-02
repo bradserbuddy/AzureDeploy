@@ -33,6 +33,8 @@
     $dcUsersPassword = "!Bubbajoe5312"
     $sqlDcUserName1 = "SQLSvc1"
     $sqlDcUserName2 = "SQLSvc2"
+    $sqlUserName1 = "$domainNameAsPrefix$sqlDcUserName1"
+    $sqlUserName2 = "$domainNameAsPrefix$sqlDcUserName2"
     $installUserName = "Install"
 
     $quorumServerName = "v2-seasia-qm" # 15 character limit
@@ -40,7 +42,10 @@
     $sql1ServerName = "v2-seasia-sql1"
     $sql2ServerName = "v2-seasia-sql2"
     $sqlPassword = "sdbl,DTP"
+
+    $sqlAvailabilityGroupName = "AG1"
+    $sqlClusterName = "ClusterSeAsia"
+    $sqlListenerName = "ListenerSeAsia"
+
+    $dataDiskSize = 100
 }
-
-
-$dataDiskSize = 100

@@ -10,7 +10,7 @@
         Import-AzurePublishSettingsFile -PublishSettingsFile $publishSettings
     }
 
-    Select-AzureSubscription -Current -SubscriptionName "Windows Azure BizSpark 1111"
+    Select-AzureSubscription -Default -SubscriptionName "Windows Azure BizSpark 1111"
 
     $currentAccount = Get-AzureAccount
     
@@ -19,5 +19,5 @@
         Add-AzureAccount
     }
 
-    $subscriptionId = (Get-AzureSubscription -Current).SubscriptionId
+    $subscriptionId = (Get-AzureSubscription -Default).SubscriptionId
 }

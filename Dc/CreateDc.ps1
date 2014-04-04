@@ -4,7 +4,7 @@
 
     $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
 
-    $VMStatus = Get-AzureVM -ServiceName $dcServiceName -Name $serverName
+    $VMStatus = Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName
 
     if ($VMStatus -eq $null)
     {
@@ -20,11 +20,11 @@
                 -AdminUserName $vmAdminUser `
                 -Password $vmAdminPassword |
                 New-AzureVM `
-                    -ServiceName $dcServiceName `
+                    -ServiceName $dcCloudServiceName `
                     –AffinityGroup $affinityGroupName `
                     -VNetName $virtualNetworkName
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $dcServiceName $dcServerName
+        Wait-ForVM $dcCloudServiceName $dcServerName
     }
 }

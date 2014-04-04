@@ -8,7 +8,7 @@
 
     # Create SQL 1
 
-    $VMStatus = Get-AzureVM -ServiceName $sqlServiceName -Name $sql1ServerName
+    $VMStatus = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql1ServerName
 
     if ($VMStatus.InstanceStatus -ne "ReadyRole")
     {
@@ -17,7 +17,7 @@
             -InstanceSize Large `
             -ImageName $sqlImageName `
             -MediaLocation "$storageAccountContainer$sql1ServerName.vhd" `
-            -AvailabilitySetName $availabilitySetName `
+            -AvailabilitySetName $azureAvailabilitySetName `
             -HostCaching "ReadOnly" `
             -DiskLabel "OS" | 
             Add-AzureProvisioningConfig `
@@ -36,15 +36,15 @@
                         -Protocol "tcp" `
                         -PublicPort 1 `
                         -LocalPort 1433 | 
-                         New-AzureVM -ServiceName $sqlServiceName
+                         New-AzureVM -ServiceName $sqlCloudServiceName
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $sqlServiceName $sql1ServerName
+        Wait-ForVM $sqlCloudServiceName $sql1ServerName
     }   
 
     # Create SQL 2
 
-    $VMStatus = Get-AzureVM -ServiceName $sqlServiceName -Name $sql2ServerName
+    $VMStatus = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql2ServerName
 
     if ($VMStatus.InstanceStatus -ne "ReadyRole")
     {
@@ -53,7 +53,7 @@
             -InstanceSize Large `
             -ImageName $sqlImageName `
             -MediaLocation "$storageAccountContainer$sql2ServerName.vhd" `
-            -AvailabilitySetName $availabilitySetName `
+            -AvailabilitySetName $azureAvailabilitySetName `
             -HostCaching "ReadOnly" `
             -DiskLabel "OS" | 
             Add-AzureProvisioningConfig `
@@ -72,9 +72,9 @@
                         -Protocol "tcp" `
                         -PublicPort 2 `
                         -LocalPort 1433 | 
-                        New-AzureVM -ServiceName $sqlServiceName
+                        New-AzureVM -ServiceName $sqlCloudServiceName
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $sqlServiceName $sql2ServerName
+        Wait-ForVM $sqlCloudServiceName $sql2ServerName
     } 
 }

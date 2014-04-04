@@ -2,50 +2,57 @@
 {
     $subscriptionName = "Windows Azure BizSpark 1111"
 
-    $location = "Southeast Asia"
+	$clusterName = "v2"
+	$clusterPrefix = "$clusterName-"
+	$capitalizedClusterPrefix = $clusterName.ToUpperInvariant()
+    $location = "Eastern US"
+	$locationAbbrev = "eus"
 
-    $affinityGroupName = "buddy-v2-seasia"
-    $affinityGroupDescription = "buddy-v2-seasia HADR Affinity Group"
-    $affinityGroupLabel = "buddy-v2-seasia Affinity Group"
+
+	$clusterLocation = "$clusterPrefix$locationAbbrev"
+
+    $affinityGroupName = $clusterLocation
+    $affinityGroupDescription = "$capitalizedClusterPrefix $location Affinity Group"
+    $affinityGroupLabel = "$affinityGroupName Affinity Group"
 
     $networkConfigPath = $workingDir + "NetworkConfiguration.netcfg"
 
-    $virtualNetworkName = "Buddy Southeast Asia NET"
+    $virtualNetworkName = "$capitalizedClusterPrefix $location NET"
 
-    $storageAccountName = "buddyseasia"
-    $storageAccountLabel = "Buddy Southeast Asia Storage Account"
+    $storageAccountName = $clusterLocation
+    $storageAccountLabel = "$capitalizedClusterPrefix $location Storage Account"
     $storageAccountContainer = "https://" + $storageAccountName + ".blob.core.windows.net/vhds/"
 
-    $availabilitySetName = "SQLHADR"
-    $dcServiceName = "buddy-v2-seasia-dc" 
-    $sqlServiceName  = "buddy-v2-seasia-sql" 
+    $azureAvailabilitySetName = "$clusterLocation Availability Set"
+    $dcCloudServiceName = "$clusterLocation-dc" 
+    $sqlCloudServiceName  = "$clusterLocation-sql" 
 
     $vmAdminUser = "sysadmin" 
     $vmAdminPassword = "!Bubbajoe5312"
 
     $domainName= "corp"
-    $domainNameAsPrefix= "CORP\"
-    $FQDN = "corp.buddy.com" # corp.buddyplatform.com
+    $FQDN = "$domainName.buddyplatform.com"
+    $domainName = $domainName.ToUpperInvariant()
     $subnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
-    $dcServerName = "v2-seasia-dc" # 15 character limit
+    $dcServerName = "$clusterLocation-dc" # 15 character limit
     $dcUsersPassword = "!Bubbajoe5312"
     $sqlDcUserName1 = "SQLSvc1"
     $sqlDcUserName2 = "SQLSvc2"
-    $sqlUserName1 = "$domainNameAsPrefix$sqlDcUserName1"
-    $sqlUserName2 = "$domainNameAsPrefix$sqlDcUserName2"
+    $sqlUserName1 = "$domainName\$sqlDcUserName1"
+    $sqlUserName2 = "$domainName\$sqlDcUserName2"
     $installUserName = "Install"
 
-    $quorumServerName = "v2-seasia-qm" # 15 character limit
+    $quorumServerName = "$clusterLocation-qm" # 15 character limit
 
-    $sql1ServerName = "v2-seasia-sql1"
-    $sql2ServerName = "v2-seasia-sql2"
+    $sql1ServerName = "$clusterLocation-sql1"
+    $sql2ServerName = "$clusterLocation-sql2"
     $sqlPassword = "sdbl,DTP"
 
-    $sqlAvailabilityGroupName = "AG1"
-    $sqlClusterName = "ClusterSeAsia"
-    $sqlListenerName = "ListenerSeAsia"
+    $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
+    $sqlClusterName = "$clusterLocation Sql Cluster"
+    $sqlListenerName = "$clusterLocation Listener"
 
     $dataDiskSize = 100
 }

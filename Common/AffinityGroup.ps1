@@ -1,6 +1,12 @@
 ﻿function AffinityGroup()
 {
-    $affinityGroup = Get-AzureAffinityGroup -Name $affinityGroupName
+    $affinityGroup = $null
+    
+    try
+    {
+        $affinityGroup = Get-AzureAffinityGroup -Name $affinityGroupName
+    }
+    catch {}
 
     if ($affinityGroup -eq $null)
     {

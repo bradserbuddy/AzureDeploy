@@ -2,10 +2,11 @@
 {
     $subscriptionName = "Windows Azure BizSpark 1111"
 
-	$clusterName = "v2"
+    $delimiter = "-"
+	$clusterName = "buddy$($delimiter)v2"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
-	$clusterPrefix = "$clusterName-"
-    $location = "Eastern US"
+	$clusterPrefix = "$clusterName$delimiter"
+    $location = "East US"
 	$locationAbbrev = "eus"
 
 
@@ -17,13 +18,13 @@
 
     $virtualNetworkName = "$capitalizedClusterName $location NET"
 
-    $storageAccountName = $clusterLocation
+    $storageAccountName = $clusterLocation.Replace($delimiter, "") # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
     $storageAccountLabel = "$capitalizedClusterName $location Storage Account"
     $storageAccountContainer = "https://" + $storageAccountName + ".blob.core.windows.net/vhds/"
 
     $azureAvailabilitySetName = "$clusterLocation Availability Set"
-    $dcCloudServiceName = "Buddy-$clusterLocation-dc" 
-    $sqlCloudServiceName  = "$Buddy-clusterLocation-sql" 
+    $dcCloudServiceName = "$clusterLocation-dc" 
+    $sqlCloudServiceName  = "$clusterLocation-sql" 
 
     $vmAdminUser = "sysadmin" 
     $vmAdminPassword = "!Bubbajoe5312"

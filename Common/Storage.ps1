@@ -1,6 +1,13 @@
 ﻿function Storage()
 {
-    $storageAccount = Get-AzureStorageAccount -StorageAccountName $storageAccountName
+    $storageAccount = $null
+
+    try
+    {
+        $storageAccount = Get-AzureStorageAccount -StorageAccountName $storageAccountName
+    }
+    catch {}
+
 
     if ($storageAccount -eq $null)
     {

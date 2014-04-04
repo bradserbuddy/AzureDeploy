@@ -72,5 +72,5 @@ $emptyVirtualNetworkSite = @"
 
     $vNetConfigXml.ToString() >> $tempFileName
 
-    #Set-AzureVNetConfig -ConfigurationPath $tempFileName
+    Set-AzureVNetConfig -ConfigurationPath $tempFileName
 }

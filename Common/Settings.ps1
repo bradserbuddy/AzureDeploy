@@ -22,8 +22,8 @@
     $storageAccountContainer = "https://" + $storageAccountName + ".blob.core.windows.net/vhds/"
 
     $azureAvailabilitySetName = "$clusterLocation Availability Set"
-    $dcCloudServiceName = "$clusterLocation-dc" 
-    $sqlCloudServiceName  = "$clusterLocation-sql" 
+    $dcCloudServiceName = "Buddy-$clusterLocation-dc" 
+    $sqlCloudServiceName  = "$Buddy-clusterLocation-sql" 
 
     $vmAdminUser = "sysadmin" 
     $vmAdminPassword = "!Bubbajoe5312"

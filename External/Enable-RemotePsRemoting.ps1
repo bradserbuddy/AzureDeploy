@@ -21,6 +21,8 @@ PS > Enable-RemotePsRemoting <Computer>
 
 #>
 
+function Enable-RemotePsRemoting
+{
 param(
     ## The computer on which to enable remoting
     $Computername,
@@ -83,3 +85,4 @@ $null = Invoke-WmiMethod -Computer $computername -Credential $credential `
 Write-Verbose "Testing connection"
 Invoke-Command $computername {
     Get-WmiObject Win32_ComputerSystem } -Credential $credential
+}

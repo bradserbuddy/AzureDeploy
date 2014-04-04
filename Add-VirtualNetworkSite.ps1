@@ -1,6 +1,6 @@
 ﻿[Reflection.Assembly]::LoadWithPartialName("System.Xml.Linq")
 
-function Add-VirtualNetworkSite($name, $affinityGroupName, $addressPrefix, $frontSubnetAddressPrefix, $backSubnetAddressPrefix)
+function Add-VirtualNetworkSite($virtualNetworkName, $affinityGroupName, $addressPrefix, $frontSubnetAddressPrefix, $backSubnetAddressPrefix)
 {
     $ns = [System.Xml.Linq.XNamespace]::Get("http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration")
 
@@ -26,13 +26,13 @@ $emptyDocument = @"
     }
 
 
-    $virtualNetworkSite = $vNetConfigXml.Root.Element($ns + "VirtualNetworkConfiguration").Element($ns + "VirtualNetworkSites").Elements($ns + "VirtualNetworkSite") | Where-Object {$_.Attribute("name").Value -eq $name}
+    $virtualNetworkSite = $vNetConfigXml.Root.Element($ns + "VirtualNetworkConfiguration").Element($ns + "VirtualNetworkSites").Elements($ns + "VirtualNetworkSite") | Where-Object {$_.Attribute("name").Value -eq $virtualNetworkName}
 
     if ($virtualNetworkSite -eq $null)
     {
 # spaces inside 'empty' elements are necessary for parsing to succeed
 $emptyVirtualNetworkSite = @"
-<VirtualNetworkSite name="$name" AffinityGroup="" xmlns="$($ns)">
+<VirtualNetworkSite name="$virtualNetworkName" AffinityGroup="" xmlns="$($ns)">
     <AddressSpace>
         <AddressPrefix> </AddressPrefix>
     </AddressSpace>
@@ -51,11 +51,11 @@ $emptyVirtualNetworkSite = @"
 
         $vNetConfigXml.Root.Element($ns + "VirtualNetworkConfiguration").Element($ns + "VirtualNetworkSites").Add($virtualNetworkSiteTemplate);
 
-        $virtualNetworkSite = $vNetConfigXml.Root.Element($ns + "VirtualNetworkConfiguration").Element($ns + "VirtualNetworkSites").Elements($ns + "VirtualNetworkSite") | Where-Object {$_.Attribute("name").Value -eq $name}
+        $virtualNetworkSite = $vNetConfigXml.Root.Element($ns + "VirtualNetworkConfiguration").Element($ns + "VirtualNetworkSites").Elements($ns + "VirtualNetworkSite") | Where-Object {$_.Attribute("name").Value -eq $virtualNetworkName}
     }
 
 
-    $virtualNetworkSite.Attribute("name").Value = $name
+    $virtualNetworkSite.Attribute("name").Value = $virtualNetworkName
     $virtualNetworkSite.Attribute("AffinityGroup").Value = $affinityGroupName
 
     $virtualNetworkSite.Element($ns + "AddressSpace").Element($ns + "AddressPrefix").Value = $addressPrefix

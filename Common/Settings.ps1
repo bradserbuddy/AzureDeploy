@@ -3,8 +3,8 @@
     $subscriptionName = "Windows Azure BizSpark 1111"
 
 	$clusterName = "v2"
+	$capitalizedClusterName = $clusterName.ToUpperInvariant()
 	$clusterPrefix = "$clusterName-"
-	$capitalizedClusterPrefix = $clusterName.ToUpperInvariant()
     $location = "Eastern US"
 	$locationAbbrev = "eus"
 
@@ -12,15 +12,13 @@
 	$clusterLocation = "$clusterPrefix$locationAbbrev"
 
     $affinityGroupName = $clusterLocation
-    $affinityGroupDescription = "$capitalizedClusterPrefix $location Affinity Group"
+    $affinityGroupDescription = "$capitalizedClusterName $location Affinity Group"
     $affinityGroupLabel = "$affinityGroupName Affinity Group"
 
-    $networkConfigPath = $workingDir + "NetworkConfiguration.netcfg"
-
-    $virtualNetworkName = "$capitalizedClusterPrefix $location NET"
+    $virtualNetworkName = "$capitalizedClusterName $location NET"
 
     $storageAccountName = $clusterLocation
-    $storageAccountLabel = "$capitalizedClusterPrefix $location Storage Account"
+    $storageAccountLabel = "$capitalizedClusterName $location Storage Account"
     $storageAccountContainer = "https://" + $storageAccountName + ".blob.core.windows.net/vhds/"
 
     $azureAvailabilitySetName = "$clusterLocation Availability Set"

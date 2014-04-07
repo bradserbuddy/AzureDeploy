@@ -10,9 +10,9 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
 #Clear-Item WSMan:\localhost\Client\TrustedHosts
 #Set-Item wsman:\localhost\Client\TrustedHosts -Value "$sql1ServerName.$FQDN,$sql2ServerName.$FQDN,$quorumServerName.$FQDN" -Force
-#[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$false}
+#[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 #sqlcmd -S ListenerSeAsia,1433 -d BuddyObjects-Test-BRADLEYSERB1 -q "select @@servername, db_name()" -l 15 -U CORP\Install -P !Bubbajoe5312
 
 
-$configureAGListenerCloudOnlyScript = $workingDir + "ConfigureAGListenerCloudOnly.ps1"
+$configureAGListenerCloudOnlyScript = $workingDir + "External\ConfigureAGListenerCloudOnly.ps1"
 & $configureAGListenerCloudOnlyScript  -AGName $sqlAvailabilityGroupName -ListenerName $sqlListenerName -ServiceName $sqlCloudServiceName -WSFCNodes $sql1ServerName,$sql2ServerName,$quorumServerName -DomainAccount "$domainNameAsPrefix$installUserName" -Password $dcUsersPassword

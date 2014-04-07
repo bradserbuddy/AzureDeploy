@@ -8,7 +8,8 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . Common $workingDir
 
 
-. $workingDir"Sql\AddDbToAvailabilityGroup.ps1"
-#AddDbToAvailabilityGroup "BuddyObjects-Test-BRADLEYSERB1"
+. $workingDir"Sql\CreateAvailabilityGroup.ps1"
+CreateAvailabilityGroup "BuddyObjects"
 
-AddDbToAvailabilityGroup "BuddyObjects-Queue-Test-BRADLEYSERB1"
+. $workingDir"Sql\AddDbToAvailabilityGroup.ps1"
+AddDbToAvailabilityGroup "buddy_queue"

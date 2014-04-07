@@ -29,7 +29,7 @@
 
 
     Set-ExecutionPolicy Unrestricted -Force
-    $createAzureFailoverClusterScript = $workingDir + "CreateAzureFailoverCluster.ps1"
+    $createAzureFailoverClusterScript = $workingDir + "External\CreateAzureFailoverCluster.ps1"
     & $createAzureFailoverClusterScript -ClusterName "$sqlClusterName" -ClusterNode "$sql1ServerName","$sql2ServerName","$quorumServerName" -Force
 
 

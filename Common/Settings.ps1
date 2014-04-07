@@ -33,6 +33,7 @@
 	$buddyplatformDomainName = "buddy" # Update Step 2
     $FQDN = "$domainName.$($buddyplatformDomainName).com"
     $domainName = $domainName.ToUpperInvariant()
+ 	$domainNameAsPrefix = "$domainName\"
     $subnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
@@ -51,8 +52,8 @@
     $sqlPassword = "sdbl,DTP"
 
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
-    $sqlClusterName = "$clusterLocation Sql Cluster"
-    $sqlListenerName = "$clusterLocation Listener"
+    $sqlClusterName = "$($clusterLocation)SqlCluster" # must be a valid DNS name
+    $sqlListenerName = "$($clusterLocation)Listener"
 
     $dataDiskSize = 100
 }

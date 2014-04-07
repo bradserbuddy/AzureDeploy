@@ -3,7 +3,7 @@
     $subscriptionName = "Windows Azure BizSpark 1111"
 
     $delimiter = "-"
-	$clusterName = "buddy$($delimiter)v2"
+	$clusterName = "b$($delimiter)v2"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
 	$clusterPrefix = "$clusterName$delimiter"
     $location = "East US"
@@ -30,7 +30,8 @@
     $vmAdminPassword = "!Bubbajoe5312"
 
     $domainName= "corp"
-    $FQDN = "$domainName.buddyplatform.com"
+	$buddyplatformDomainName = "buddy" # Update Step 2
+    $FQDN = "$domainName.$($buddyplatformDomainName).com"
     $domainName = $domainName.ToUpperInvariant()
     $subnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"

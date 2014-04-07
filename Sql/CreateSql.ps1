@@ -3,7 +3,7 @@
     . $workingDir"Sql\CopySqlImage.ps1"
     & CopySqlImage
 
-    $sqlImageName = "SQLImageCopy"
+    $sqlImageName = "SQLImage$storageAccountName"
 
 
     # Create SQL 1

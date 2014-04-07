@@ -66,7 +66,10 @@ $emptyVirtualNetworkSite = @"
     $backSubnet = $virtualNetworkSite.Element($ns + "Subnets").Elements($ns + "Subnet") | Where-Object {$_.Attribute("name").Value -eq "Back"}
     $backSubnet.Element($ns + "AddressPrefix").Value = $backSubnetAddressPrefix
 
-    $virtualNetworkSite.LastAttribute.Remove() # TODO: Figure out the right way to add $virtualNetworkSiteTemplate such that removal of this namespace isn't needed
+    if ($virtualNetworkSite.LastAttribute.Name -eq "xmlns")
+    {
+        $virtualNetworkSite.LastAttribute.Remove() # TODO: Figure out the right way to add $virtualNetworkSiteTemplate such that removal of this namespace isn't needed
+    }
 
     $tempFileName = [System.IO.Path]::GetTempFileName()
 

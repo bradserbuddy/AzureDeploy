@@ -20,11 +20,16 @@ function CopySqlImage()
     $SrcStgKey = (Get-AzureStorageKey -StorageAccountName $SrcStorageAccount).Primary;
     $SrcStorageContext=New-AzureStorageContext -StorageAccountName $SrcStorageAccount -StorageAccountKey $SrcStgKey -Protocol Https;
 
-    $DestStgKey = (Get-AzureStorageKey -StorageAccountName $global:storageAccountName).Primary;
-    $DestStorageContext=New-AzureStorageContext -StorageAccountName $global:storageAccountName -StorageAccountKey $DestStgKey -Protocol Https;
+    $DestStgKey = (Get-AzureStorageKey -StorageAccountName $storageAccountName).Primary;
+    $DestStorageContext=New-AzureStorageContext -StorageAccountName $storageAccountName -StorageAccountKey $DestStgKey -Protocol Https;
 
 
-    $sqlStorageBlob = Get-AzureStorageBlob -Context $DestStorageContext -Blob $DestImageVHD -Container $ImageContainerName.TrimEnd("/")
+    $sqlStorageBlob = $null
+    try
+    {
+        $sqlStorageBlob = Get-AzureStorageBlob -Context $DestStorageContext -Blob $DestImageVHD -Container $ImageContainerName.TrimEnd("/")
+    }
+    catch { }
 
     if ($sqlStorageBlob -eq $null)
     {
@@ -33,6 +38,6 @@ function CopySqlImage()
         $ImageBlob | Get-AzureStorageBlobCopyState -WaitForComplete;
 
         $mediaLocation = $DestStorageContext.BlobEndPoint + $ImageContainerName + $DestImageVHD
-        Add-AzureVMImage -ImageName $DestImageName + "Copy" -OS "Windows" -MediaLocation $mediaLocation
+        Add-AzureVMImage -ImageName "$DestImageName$storageAccountName" -OS "Windows" -MediaLocation $mediaLocation
     }
 }

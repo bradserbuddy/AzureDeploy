@@ -1,10 +1,10 @@
 ﻿function CreateQuorum($workingDir)
 {
-    $VMStatus = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $quorumServerName
-
     $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
 
-    if ($VMStatus.InstanceStatus -ne "ReadyRole")
+    $vm = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $quorumServerName
+
+    if ($vm.InstanceStatus -ne "ReadyRole")
     {
         New-AzureVMConfig `
             -Name $quorumServerName `
@@ -23,7 +23,7 @@
                 -DomainUserName $vmAdminUser `
                 -DomainPassword $vmAdminPassword |
                 Set-AzureSubnet `
-                    -SubnetNames $subnetName |
+                    -SubnetNames $backSubnetName |
                     New-AzureVM `
                         -ServiceName $sqlCloudServiceName `
                         –AffinityGroup $affinityGroupName `
@@ -31,6 +31,6 @@
                         -DnsSettings $dnsSettings
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $sqlCloudServiceName $quorumServerName
+        WaitAndDownloadRDF-ForVM $sqlCloudServiceName $quorumServerName
     }
 }

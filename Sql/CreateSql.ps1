@@ -8,9 +8,9 @@
 
     # Create SQL 1
 
-    $VMStatus = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql1ServerName
+    $vm = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql1ServerName
 
-    if ($VMStatus.InstanceStatus -ne "ReadyRole")
+    if ($vm.InstanceStatus -ne "ReadyRole")
     {
         New-AzureVMConfig `
             -Name $sql1ServerName `
@@ -30,7 +30,7 @@
                 -DomainUserName $vmAdminUser `
                 -DomainPassword $vmAdminPassword |
                 Set-AzureSubnet `
-                    -SubnetNames $subnetName |
+                    -SubnetNames $backSubnetName |
                     Add-AzureEndpoint `
                         -Name "SQL" `
                         -Protocol "tcp" `
@@ -39,14 +39,14 @@
                          New-AzureVM -ServiceName $sqlCloudServiceName
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $sqlCloudServiceName $sql1ServerName
+        WaitAndDownloadRDF-ForVM $sqlCloudServiceName $sql1ServerName
     }   
 
     # Create SQL 2
 
-    $VMStatus = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql2ServerName
+    $vm = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql2ServerName
 
-    if ($VMStatus.InstanceStatus -ne "ReadyRole")
+    if ($vm.InstanceStatus -ne "ReadyRole")
     {
         New-AzureVMConfig `
             -Name $sql2ServerName `
@@ -66,7 +66,7 @@
                 -DomainUserName $vmAdminUser `
                 -DomainPassword $vmAdminPassword |
                 Set-AzureSubnet `
-                    -SubnetNames $subnetName |
+                    -SubnetNames $backSubnetName |
                     Add-AzureEndpoint `
                         -Name "SQL" `
                         -Protocol "tcp" `
@@ -75,6 +75,6 @@
                         New-AzureVM -ServiceName $sqlCloudServiceName
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $sqlCloudServiceName $sql2ServerName
+        WaitAndDownloadRDF-ForVM $sqlCloudServiceName $sql2ServerName
     } 
 }

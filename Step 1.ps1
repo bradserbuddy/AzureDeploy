@@ -10,3 +10,15 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
 . $workingDir"Dc\CreateNetAndDc.ps1"
 CreateNetAndDc $workingDir
+
+
+. $workingDir"Web\CreateWeb.ps1"
+CreateWeb $workingDir
+
+
+. $workingDir"Web\SetWebEndpoints.ps1"
+SetWebEndpoints $workingDir
+
+
+. $workingDir"Mongo\CreateMongo.ps1"
+CreateMongo $workingDir

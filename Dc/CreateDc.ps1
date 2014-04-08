@@ -4,9 +4,9 @@
 
     $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
 
-    $VMStatus = Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName
+    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $dcServerName
 
-    if ($VMStatus -eq $null)
+    if ($vm -eq $null)
     {
         New-AzureVMConfig `
             -Name $dcServerName `
@@ -25,7 +25,7 @@
                     -VNetName $virtualNetworkName
 
         . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $dcCloudServiceName $dcServerName
+        WaitAndDownloadRDF-ForVM $dcCloudServiceName $dcServerName
 
 		#$credential = New-Object System.Management.Automation.PSCredential($vmAdminUser, $(ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force))
 		#Enable-RemotePsRemoting $dcServerName $credential

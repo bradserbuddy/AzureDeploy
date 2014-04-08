@@ -45,6 +45,12 @@
     $sqlUserName2 = "$domainName\$sqlDcUserName2"
     $installUserName = "Install"
 
+    $webServerName1 = "$clusterLocation-web1"
+    $webServerName2 = "$clusterLocation-web2"
+
+    $mongoServerName1 = "$clusterLocation-m1"
+    $mongoServerName2 = "$clusterLocation-m2"
+
     $quorumServerName = "$clusterLocation-qm" # 15 character limit
 
     $sql1ServerName = "$clusterLocation-sql1"

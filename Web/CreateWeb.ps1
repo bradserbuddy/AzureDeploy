@@ -1,4 +1,6 @@
-﻿function CreateWeb($workingDir)
+﻿#TODO: create master\web1 share for slave\web2
+
+function CreateWeb($workingDir)
 {
     # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
 

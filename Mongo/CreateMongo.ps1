@@ -1,4 +1,7 @@
-﻿function CreateMongo($workingDir)
+﻿#TODO: add mongodb to mongo boxes, add user\password
+
+
+function CreateMongo($workingDir)
 {
     # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
 

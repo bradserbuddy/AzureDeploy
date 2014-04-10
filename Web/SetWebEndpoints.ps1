@@ -1,4 +1,6 @@
-﻿Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
+﻿#TODO: verify firewall\Azure ports match up with bindings
+
+Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
 
 $ErrorActionPreference = "Stop"
 

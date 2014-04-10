@@ -1,4 +1,6 @@
-﻿function Common($workingDir)
+﻿#TODO: add region code to machine .configs
+
+function Common($workingDir)
 {
     . $workingDir"Common\Settings.ps1"
     . Settings $workingDir # Called with dot source, so the settings variables are global

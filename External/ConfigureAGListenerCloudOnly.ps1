@@ -73,7 +73,7 @@ param(
    [Parameter(Mandatory=$true)]
     $ServiceName,
    [Parameter(Mandatory=$false)]
-    $EndpointName = "ListenerEndpoint",
+    $EndpointName = "ListenerEP", # this needed to be less than 15 characters!
    [Parameter(Mandatory=$false)]
     $EndpointPort = 1433,
    [Parameter(Mandatory=$true)]

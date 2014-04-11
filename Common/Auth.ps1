@@ -5,12 +5,12 @@
     if ($allSubscriptions -eq $null)
     {
         # call Get-AzurePublishSettingsFile to get an updated .publishsettings if needed
-        $publishSettings = $workingDir + "Windows Azure MSDN - Visual Studio Ultimate-Windows Azure BizSpark 1111-3-25-2014-credentials.publishsettings"
+        $publishSettings = $workingDir + "Windows Azure MSDN - Visual Studio Ultimate-Windows Azure for BizSpark Plus -4-11-2014-credentials.publishsettings"
 
         Import-AzurePublishSettingsFile -PublishSettingsFile $publishSettings
     }
 
-    Select-AzureSubscription -Default -SubscriptionName "Windows Azure BizSpark 1111"
+    Select-AzureSubscription -Default -SubscriptionName "Windows Azure for BizSpark Plus "
 
     $currentAccount = Get-AzureAccount
     

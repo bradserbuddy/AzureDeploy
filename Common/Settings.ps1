@@ -37,7 +37,7 @@
     $subnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
-    $dcServerName = "$clusterLocation-dc" # 15 character limit
+    $dcServerName = "$clusterLocation-dc" # must be a valid DNS name (15 character limit)
     $dcUsersPassword = "!Bubbajoe5312"
     $sqlDcUserName1 = "SQLSvc1"
     $sqlDcUserName2 = "SQLSvc2"
@@ -58,8 +58,8 @@
     $sqlPassword = "sdbl,DTP"
 
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
-    $sqlClusterName = "$($clusterLocation)SqlCluster" # must be a valid DNS name
-    $sqlListenerName = "$($clusterLocation)Listener"
+    $sqlClusterName = "$($clusterLocation)-SC" # must be a valid DNS name (15 character limit)?
+    $sqlListenerName = "$($clusterLocation)-L" # must be a valid DNS name (15 character limit)
 
     $dataDiskSize = 100
 }

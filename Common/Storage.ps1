@@ -18,6 +18,6 @@
     }
 
     Set-AzureSubscription `
-        -SubscriptionName (Get-AzureSubscription -Current).SubscriptionName `
+        -SubscriptionName (Get-AzureSubscription -Default).SubscriptionName `
         -CurrentStorageAccountName $storageAccountName
 }

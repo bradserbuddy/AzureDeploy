@@ -1,4 +1,4 @@
-﻿function CreateDc($workingDir)
+﻿function CreateDc()
 {
     # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
 
@@ -22,14 +22,12 @@
                 New-AzureVM `
                     -ServiceName $dcCloudServiceName `
                     –AffinityGroup $affinityGroupName `
-                    -VNetName $virtualNetworkName
+                    -VNetName $virtualNetworkName `
+                    -WaitForBoot
 
-        . $workingDir"\Common\WaitForVM.ps1"
-        WaitAndDownloadRDF-ForVM $dcCloudServiceName $dcServerName
-
-		#$credential = New-Object System.Management.Automation.PSCredential($vmAdminUser, $(ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force))
-		#Enable-RemotePsRemoting $dcServerName $credential
-	
-		#Invoke-Command -ComputerName $dcServerName –ScriptBlock { dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:$FQDN /ForestLevel:4 /DomainNetbiosName:$domainName /DomainLevel:4 /InstallDNS:Yes /ConfirmGc:Yes /CreateDNSDelegation:No /DatabasePath:"C:\Windows\NTDS" /LogPath:"C:\Windows\NTDS" /SYSVOLPath:"C:\Windows\SYSVOL" /SafeModeAdminPassword:$vmAdminPassword }
+        Get-AzureRemoteDesktopFile `
+            -ServiceName $dcCloudServiceName `
+            -Name $dcServerName `
+            -LocalPath "$workingDir$dcServerName.rdp" 
     }
 }

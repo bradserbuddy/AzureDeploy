@@ -1,67 +1,74 @@
-﻿#TODO: add mongodb to mongo boxes, add user\password
-
-
-function CreateMongo($workingDir)
+﻿function CreateMongo()
 {
-    # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
-
     $linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
+
+    $certificate = New-AzureSSHKey –Fingerprint "1aa4737aa5724ee4cc0beea45dc5b799" –Path "C:\src\bran-the-builder\deploy_key.rsa.pub"
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
 
     if ($vm -eq $null)
     {
-        New-AzureVMConfig `
-            -Name $mongoServerName1 `
-            -InstanceSize Large `
-            -ImageName $linuxImageName `
-            -MediaLocation "$storageAccountContainer$mongoServerName1.vhd" `
-            -AvailabilitySetName $azureAvailabilitySetName `
-            -DiskLabel "OS" | 
-            Add-AzureProvisioningConfig `
-                -Linux `
-                -LinuxUser $vmAdminUser `
-                -Password $vmAdminPassword |
-                Set-AzureSubnet `
-                    -SubnetNames $frontSubnetName |
-					New-AzureVM `
-						-ServiceName $dcCloudServiceName
-
-        . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $dcCloudServiceName $mongoServerName1
-
-		#$credential = New-Object System.Management.Automation.PSCredential($vmAdminUser, $(ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force))
-		#Enable-RemotePsRemoting $dcServerName $credential
-	
-		#Invoke-Command -ComputerName $dcServerName –ScriptBlock { dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:$FQDN /ForestLevel:4 /DomainNetbiosName:$domainName /DomainLevel:4 /InstallDNS:Yes /ConfirmGc:Yes /CreateDNSDelegation:No /DatabasePath:"C:\Windows\NTDS" /LogPath:"C:\Windows\NTDS" /SYSVOLPath:"C:\Windows\SYSVOL" /SafeModeAdminPassword:$vmAdminPassword }
+        CreateMongoVM($mongoServerName1, 20322)
     }
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName2
 
     if ($vm -eq $null)
     {
-        New-AzureVMConfig `
-            -Name $mongoServerName2 `
-            -InstanceSize Large `
-            -ImageName $linuxImageName `
-            -MediaLocation "$storageAccountContainer$mongoServerName2.vhd" `
-            -AvailabilitySetName $azureAvailabilitySetName `
-            -DiskLabel "OS" | 
-            Add-AzureProvisioningConfig `
-                -Linux `
-                -LinuxUser $vmAdminUser `
-                -Password $vmAdminPassword |
-                Set-AzureSubnet `
-                    -SubnetNames $frontSubnetName |
-					New-AzureVM `
-						-ServiceName $dcCloudServiceName
-
-        . $workingDir"\Common\WaitForVM.ps1"
-        Wait-ForVM $dcCloudServiceName $mongoServerName2
-
-		#$credential = New-Object System.Management.Automation.PSCredential($vmAdminUser, $(ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force))
-		#Enable-RemotePsRemoting $dcServerName $credential
-	
-		#Invoke-Command -ComputerName $dcServerName –ScriptBlock { dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:$FQDN /ForestLevel:4 /DomainNetbiosName:$domainName /DomainLevel:4 /InstallDNS:Yes /ConfirmGc:Yes /CreateDNSDelegation:No /DatabasePath:"C:\Windows\NTDS" /LogPath:"C:\Windows\NTDS" /SYSVOLPath:"C:\Windows\SYSVOL" /SafeModeAdminPassword:$vmAdminPassword }
+        CreateMongoVM($mongoServerName2, 20422)
     }
+}
+
+function CreateMongoVM($serverName, $port)
+{
+    New-AzureVMConfig `
+        -Name $serverName `
+        -InstanceSize Large `
+        -ImageName $linuxImageName `
+        -MediaLocation "$storageAccountContainer$serverName.vhd" `
+        -AvailabilitySetName $azureAvailabilitySetName `
+        -DiskLabel "OS" | 
+        Add-AzureProvisioningConfig `
+            -Linux `
+            -LinuxUser $vmAdminUser `
+            -Password $vmAdminPassword `
+            -SSHPublicKeys $certificate |
+            Set-AzureSubnet `
+                -SubnetNames $frontSubnetName |
+				New-AzureVM `
+					-ServiceName $dcCloudServiceName `
+                    -WaitForBoot |
+                        Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Mongo" -LUN 0 |
+                            Add-AzureEndpoint -Name "SSH" `
+                                                -Protocol tcp `
+                                                -PublicPort $port `
+                                                -LocalPort 22
+    
+    SSH($port, "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10")
+
+<# echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+sudo apt-get update
+sudo apt-get install mongodb-org
+sudo chkconfig mongod on
+
+sudo fdisk /dev/sdc < fdiskCommands.txt
+sudo mkfs -t ext4 /dev/sdc1
+sudo mkdir /datadrive
+sudo mount /dev/sdc1 /datadrive
+sudo -i blkid | grep sdc1 | sed -r 's/.*(UUID=\"[0-9a-f-]{36}\").*/\1/' | sed 's/$/ \/datadrive ext4 defaults 0 2/' | sudo tee -a /etc/fstab
+sudo mount /datadrive
+sudo cat /etc/mongodb.conf | sudo sed -e 's/dbpath=\/data\/db//dbpath=\/datadrive\/db/' > /etc/mongodb.conf
+sudo mkdir -p /datadrive/db
+sudo chown -R mongodb:nogroup /datadrive/db
+sudo chgrp -R mongodb:nogroup /datadrive/db
+sudo service mongod start
+
+use admin
+db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+exit #>
+}
+
+function SSH($command, $port)
+{
+    ssh $vmAdminUser@$dcCloudServiceName.cloudapp.net -p $port -i "C:\src\bran-the-builder\deploy_key.rsa" 
 }

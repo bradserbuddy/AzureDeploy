@@ -1,6 +1,4 @@
-﻿#TODO: create master\web1 share for slave\web2
-
-function CreateWeb($workingDir)
+﻿function CreateWeb()
 {
     # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
 
@@ -26,14 +24,12 @@ function CreateWeb($workingDir)
                     -SubnetNames $frontSubnetName |
 					New-AzureVM `
 						-ServiceName $dcCloudServiceName
+                        -WaitForBoot
 
-        . $workingDir"\Common\WaitForVM.ps1"
-        WaitAndDownloadRDF-ForVM $dcCloudServiceName $webServerName1
-
-		#$credential = New-Object System.Management.Automation.PSCredential($vmAdminUser, $(ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force))
-		#Enable-RemotePsRemoting $dcServerName $credential
-	
-		#Invoke-Command -ComputerName $dcServerName –ScriptBlock { dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:$FQDN /ForestLevel:4 /DomainNetbiosName:$domainName /DomainLevel:4 /InstallDNS:Yes /ConfirmGc:Yes /CreateDNSDelegation:No /DatabasePath:"C:\Windows\NTDS" /LogPath:"C:\Windows\NTDS" /SYSVOLPath:"C:\Windows\SYSVOL" /SafeModeAdminPassword:$vmAdminPassword }
+        Get-AzureRemoteDesktopFile `
+            -ServiceName $dcCloudServiceName `
+            -Name $webServerName1 `
+            -LocalPath "$workingDir$webServerName1.rdp" 
     }
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName2
@@ -56,13 +52,13 @@ function CreateWeb($workingDir)
                     -SubnetNames $frontSubnetName |
 					New-AzureVM `
 						-ServiceName $dcCloudServiceName
+                        -WaitForBoot
 
-        . $workingDir"\Common\WaitForVM.ps1"
-        WaitAndDownloadRDF-ForVM $dcCloudServiceName $webServerName2
-
-		#$credential = New-Object System.Management.Automation.PSCredential($vmAdminUser, $(ConvertTo-SecureString $vmAdminPassword -AsPlainText -Force))
-		#Enable-RemotePsRemoting $dcServerName $credential
-	
-		#Invoke-Command -ComputerName $dcServerName –ScriptBlock { dcpromo.exe /unattend /ReplicaOrNewDomain:Domain /NewDomain:Forest /NewDomainDNSName:$FQDN /ForestLevel:4 /DomainNetbiosName:$domainName /DomainLevel:4 /InstallDNS:Yes /ConfirmGc:Yes /CreateDNSDelegation:No /DatabasePath:"C:\Windows\NTDS" /LogPath:"C:\Windows\NTDS" /SYSVOLPath:"C:\Windows\SYSVOL" /SafeModeAdminPassword:$vmAdminPassword }
+        Get-AzureRemoteDesktopFile `
+            -ServiceName $dcCloudServiceName `
+            -Name $webServerName2 `
+            -LocalPath "$workingDir$webServerName2.rdp" 
     }
+
+#TODO: create master\web1 share for slave\web2
 }

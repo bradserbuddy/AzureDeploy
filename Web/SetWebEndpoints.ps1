@@ -24,7 +24,7 @@ function SetWebEndpoints($serverName)
                             -LBSetName "eus-http" `
                             -Protocol tcp `
                             -PublicPort 80 `
-                            -LocalPort 8080 `
+                            -LocalPort 80 `
                             -DefaultProbe |
         Add-AzureEndpoint -Name "Https" `
                             -LBSetName "eus-ssl" `

@@ -1,6 +1,6 @@
 ﻿function Settings()
 {
-    $subscriptionName = "Windows Azure BizSpark 1111"
+    $subscriptionName = "Windows Azure for BizSpark Plus"
 
     $delimiter = "-"
 	$clusterName = "b$($delimiter)v2"

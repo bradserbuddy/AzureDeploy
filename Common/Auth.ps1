@@ -1,5 +1,8 @@
-﻿function Auth($workingDir)
+﻿function Auth()
 {
+    # Ensure that we are not already logged in to Azure
+    Get-AzureAccount | ForEach-Object { Remove-AzureAccount $_.Name -Force }
+
     $allSubscriptions = Get-AzureSubscription
 
     if ($allSubscriptions -eq $null)
@@ -10,14 +13,7 @@
         Import-AzurePublishSettingsFile -PublishSettingsFile $publishSettings
     }
 
-    Select-AzureSubscription -Default -SubscriptionName "Windows Azure for BizSpark Plus"
-
-    $currentAccount = Get-AzureAccount
-    
-    if ($currentAccount -eq $null)
-    {
-        Add-AzureAccount
-    }
+    Select-AzureSubscription -Default -SubscriptionName $subscriptionName
 
     $subscriptionId = (Get-AzureSubscription -Default).SubscriptionId
 }

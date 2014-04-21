@@ -28,9 +28,12 @@
                         -ServiceName $sqlCloudServiceName `
                         –AffinityGroup $affinityGroupName `
                         -VNetName $virtualNetworkName `
-                        -DnsSettings $dnsSettings
+                        -DnsSettings $dnsSettings `
+                        -WaitForBoot
 
-        . $workingDir"\Common\WaitForVM.ps1"
-        WaitAndDownloadRDF-ForVM $sqlCloudServiceName $quorumServerName
+        Get-AzureRemoteDesktopFile `
+            -ServiceName $sqlCloudServiceName `
+            -Name $quorumServerName `
+            -LocalPath "$workingDir$quorumServerName.rdp"
     }
 }

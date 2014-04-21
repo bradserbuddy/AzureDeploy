@@ -1,12 +1,12 @@
 ﻿#TODO: add region code to machine .configs
 
-function Common($workingDir)
+function Common()
 {
     . $workingDir"Common\Settings.ps1"
-    . Settings $workingDir # Called with dot source, so the settings variables are global
+    . Settings # Called with dot source, so the settings variables are global
 
     . $workingDir"Common\Auth.ps1"
-    Auth $workingDir
+    Auth
 
     . $workingDir"Common\AffinityGroup.ps1"
     AffinityGroup

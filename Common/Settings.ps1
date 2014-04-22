@@ -6,8 +6,8 @@
 	$clusterName = "b$($delimiter)v2"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
 	$clusterPrefix = "$clusterName$delimiter"
-    $location = "East US"
-	$locationAbbrev = "eus"
+    $location = "West US"
+	$locationAbbrev = "wus"
 
 
 	$clusterLocation = "$clusterPrefix$locationAbbrev"
@@ -30,11 +30,12 @@
     $vmAdminPassword = "!Bubbajoe5312"
 
     $domainName= "corp"
-	$buddyplatformDomainName = "buddy" # Update Step 2
+	$buddyplatformDomainName = "buddy"
     $FQDN = "$domainName.$($buddyplatformDomainName).com"
     $domainName = $domainName.ToUpperInvariant()
  	$domainNameAsPrefix = "$domainName\"
-    $subnetName = "Back"
+    $frontSubnetName = "Front"
+    $backSubnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
     $dcServerName = "$clusterLocation-dc" # must be a valid DNS name (15 character limit)
@@ -62,4 +63,9 @@
     $sqlListenerName = "$($clusterLocation)-L" # must be a valid DNS name (15 character limit)
 
     $dataDiskSize = 100
+
+    $sshExePath = "C:\Program Files (x86)\git\bin\ssh.exe"
+    $sshFingerprint = "1aa4737aa5724ee4cc0beea45dc5b799"
+    $sshPublicKeyPath = "C:\src\bran-the-builder\deploy_key.rsa.pub"
+    $sshPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
 }

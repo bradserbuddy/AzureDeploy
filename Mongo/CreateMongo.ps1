@@ -2,25 +2,29 @@
 {
     $linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
 
-    $certificate = New-AzureSSHKey –Fingerprint "1aa4737aa5724ee4cc0beea45dc5b799" –Path "C:\src\bran-the-builder\deploy_key.rsa.pub"
+    $certificate = New-AzureSSHKey -PublicKey –Fingerprint $sshFingerprint –Path $sshPublicKeyPath
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
 
     if ($vm -eq $null)
     {
-        CreateMongoVM($mongoServerName1, 20322)
+        CreateMongoVM $mongoServerName1 20322
     }
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName2
 
     if ($vm -eq $null)
     {
-        CreateMongoVM($mongoServerName2, 20422)
+        CreateMongoVM $mongoServerName2 20422
     }
 }
 
 function CreateMongoVM($serverName, $port)
 {
+#TODO remove -AffinityGroup when DC is created first
+
+$DebugPreference = "Continue"
+
     New-AzureVMConfig `
         -Name $serverName `
         -InstanceSize Large `
@@ -32,11 +36,14 @@ function CreateMongoVM($serverName, $port)
             -Linux `
             -LinuxUser $vmAdminUser `
             -Password $vmAdminPassword `
+            -NoSSHEndpoint `
             -SSHPublicKeys $certificate |
-            Set-AzureSubnet `
-                -SubnetNames $frontSubnetName |
+            # TODO include when integrated
+            # Set-AzureSubnet `
+            #    -SubnetNames $frontSubnetName |
 				New-AzureVM `
 					-ServiceName $dcCloudServiceName `
+                    –AffinityGroup $affinityGroupName `
                     -WaitForBoot |
                         Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Mongo" -LUN 0 |
                             Add-AzureEndpoint -Name "SSH" `
@@ -44,9 +51,14 @@ function CreateMongoVM($serverName, $port)
                                                 -PublicPort $port `
                                                 -LocalPort 22
     
-    SSH($port, "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10")
+    RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
+    RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
+    RunSSH $port "sudo apt-get update"
+    RunSSH $port "sudo apt-get install mongodb-org"
+    RunSSH $port "sudo chkconfig mongod on"
 
-<# echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+<#
+echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
 sudo apt-get update
 sudo apt-get install mongodb-org
 sudo chkconfig mongod on
@@ -68,7 +80,7 @@ db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabas
 exit #>
 }
 
-function SSH($command, $port)
+function RunSSH($port, $command)
 {
-    ssh $vmAdminUser@$dcCloudServiceName.cloudapp.net -p $port -i "C:\src\bran-the-builder\deploy_key.rsa" 
+    & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshPrivateKeyPath "$command"
 }

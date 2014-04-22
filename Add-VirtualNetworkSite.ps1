@@ -37,10 +37,10 @@ $emptyVirtualNetworkSite = @"
         <AddressPrefix> </AddressPrefix>
     </AddressSpace>
     <Subnets>
-        <Subnet name="Front">
+        <Subnet name="$($frontSubnetName)">
         <AddressPrefix> </AddressPrefix>
         </Subnet>
-        <Subnet name="Back">
+        <Subnet name="$($backSubnetName)">
         <AddressPrefix> </AddressPrefix>
         </Subnet>
     </Subnets>
@@ -60,10 +60,10 @@ $emptyVirtualNetworkSite = @"
 
     $virtualNetworkSite.Element($ns + "AddressSpace").Element($ns + "AddressPrefix").Value = $addressPrefix
 
-    $frontSubnet = $virtualNetworkSite.Element($ns + "Subnets").Elements($ns + "Subnet") | Where-Object {$_.Attribute("name").Value -eq "Front"}
+    $frontSubnet = $virtualNetworkSite.Element($ns + "Subnets").Elements($ns + "Subnet") | Where-Object {$_.Attribute("name").Value -eq $frontSubnetName}
     $frontSubnet.Element($ns + "AddressPrefix").Value = $frontSubnetAddressPrefix
 
-    $backSubnet = $virtualNetworkSite.Element($ns + "Subnets").Elements($ns + "Subnet") | Where-Object {$_.Attribute("name").Value -eq "Back"}
+    $backSubnet = $virtualNetworkSite.Element($ns + "Subnets").Elements($ns + "Subnet") | Where-Object {$_.Attribute("name").Value -eq $backSubnetName}
     $backSubnet.Element($ns + "AddressPrefix").Value = $backSubnetAddressPrefix
 
     if ($virtualNetworkSite.LastAttribute.Name -eq "xmlns")

@@ -1,6 +1,7 @@
 ﻿Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
 
 $ErrorActionPreference = "Stop"
+$DebugPreference = "SilentlyContinue"
 
 $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
@@ -9,8 +10,8 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
 . $workingDir"Common\RunRemotely.ps1"
 
-. $workingDir"Add-VirtualNetworkSite.ps1"
-Add-VirtualNetworkSite $virtualNetworkName $affinityGroupName "10.10.0.0/16" "10.10.1.0/24" "10.10.2.0/24"
+#. $workingDir"Add-VirtualNetworkSite.ps1"
+#Add-VirtualNetworkSite $virtualNetworkName $affinityGroupName "10.10.0.0/16" "10.10.1.0/24" "10.10.2.0/24"
 
 <#. $workingDir"Dc\CreateDc.ps1"
 CreateDc

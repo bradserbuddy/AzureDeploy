@@ -68,4 +68,5 @@
     $sshFingerprint = "1aa4737aa5724ee4cc0beea45dc5b799"
     $sshPublicKeyPath = "C:\src\bran-the-builder\deploy_key.rsa.pub"
     $sshPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
+    $sshCertificatePath = "C:\src\bran-the-builder\deploy_key.cer"
 }

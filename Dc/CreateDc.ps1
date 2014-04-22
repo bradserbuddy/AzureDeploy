@@ -29,5 +29,7 @@
             -ServiceName $dcCloudServiceName `
             -Name $dcServerName `
             -LocalPath "$workingDir$dcServerName.rdp" 
+
+        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $dcServerName
     }
 }

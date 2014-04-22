@@ -2,6 +2,8 @@
 {
     $linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
 
+    Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshCertificatePath
+
     $certificate = New-AzureSSHKey -PublicKey –Fingerprint $sshFingerprint –Path $sshPublicKeyPath
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
@@ -21,10 +23,6 @@
 
 function CreateMongoVM($serverName, $port)
 {
-#TODO remove -AffinityGroup when DC is created first
-
-$DebugPreference = "Continue"
-
     New-AzureVMConfig `
         -Name $serverName `
         -InstanceSize Large `
@@ -38,19 +36,22 @@ $DebugPreference = "Continue"
             -Password $vmAdminPassword `
             -NoSSHEndpoint `
             -SSHPublicKeys $certificate |
-            # TODO include when integrated
-            # Set-AzureSubnet `
-            #    -SubnetNames $frontSubnetName |
+            Set-AzureSubnet `
+                -SubnetNames $frontSubnetName |
 				New-AzureVM `
 					-ServiceName $dcCloudServiceName `
-                    –AffinityGroup $affinityGroupName `
-                    -WaitForBoot |
-                        Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Mongo" -LUN 0 |
-                            Add-AzureEndpoint -Name "SSH" `
-                                                -Protocol tcp `
-                                                -PublicPort $port `
-                                                -LocalPort 22
+                    -WaitForBoot
+
+    # Can't chain because of -WaitForBoot
+    Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
+        Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Mongo" -LUN 0 |
+            Add-AzureEndpoint -Name "SSH" `
+                                -Protocol tcp `
+                                -PublicPort $port `
+                                -LocalPort 22 |
+                Update-AzureVM
     
+    InitializeSSH $port
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
     RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
     RunSSH $port "sudo apt-get update"
@@ -79,6 +80,16 @@ use admin
 db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 exit #>
 }
+ 
+function InitializeSSH($port)
+{
+    # ssh.exe throws a warning when accepting the fingerprint
+    try
+    {
+        & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshPrivateKeyPath --% -o StrictHostKeyChecking=no '"cd"'
+    } catch {}
+}
+
 
 function RunSSH($port, $command)
 {

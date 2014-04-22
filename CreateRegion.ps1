@@ -13,8 +13,8 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 #. $workingDir"Add-VirtualNetworkSite.ps1"
 #Add-VirtualNetworkSite $virtualNetworkName $affinityGroupName "10.10.0.0/16" "10.10.1.0/24" "10.10.2.0/24"
 
-<#. $workingDir"Dc\CreateDc.ps1"
-CreateDc
+. $workingDir"Dc\CreateDc.ps1"
+#CreateDc
 
 . $workingDir"Dc\ConfigureDc.ps1"
 ConfigureDc
@@ -23,12 +23,12 @@ ConfigureDc
 CreateWeb
 
 . $workingDir"Web\SetWebEndpoints.ps1"
-SetWebEndpoints#>
+SetWebEndpoints
 
-. $workingDir"Mongo\CreateMongo.ps1"
+<#. $workingDir"Mongo\CreateMongo.ps1"
 CreateMongo
 
-<#. $workingDir"Quorum\CreateQuorum.ps1"
+. $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum
 
 . $workingDir"Quorum\InstallQuorumFailoverClustering.ps1"

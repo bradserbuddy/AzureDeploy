@@ -6,7 +6,8 @@
 
         $pwd = ConvertTo-SecureString $Using:dcUsersPassword -AsPlainText -Force
 
-        $adUser = Get-ADUser -Filter {Name -eq $Using:installUserName} 
+        $installUserName = $Using:installUserName # fix scope for Filter
+        $adUser = Get-ADUser -Filter {Name -eq $installUserName} 
 
         if ($adUser -eq $null)
         {
@@ -18,7 +19,8 @@
                 -Enabled $true
         }
 
-        $adUser = Get-ADUser -Filter {Name -eq $Using:sqlDcUserName1} 
+        $sqlDcUserName1 = $Using:sqlDcUserName1
+        $adUser = Get-ADUser -Filter {Name -eq $sqlDcUserName1} 
 
         if ($adUser -eq $null)
         {
@@ -30,7 +32,8 @@
                 -Enabled $true
         }
 
-        $adUser = Get-ADUser -Filter {Name -eq $Using:sqlDcUserName2} 
+        $sqlDcUserName2 = $Using:sqlDcUserName2
+        $adUser = Get-ADUser -Filter {Name -eq $sqlDcUserName2} 
 
         if ($adUser -eq $null)
         {

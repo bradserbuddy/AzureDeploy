@@ -23,13 +23,15 @@
                 Set-AzureSubnet `
                     -SubnetNames $frontSubnetName |
 					New-AzureVM `
-						-ServiceName $dcCloudServiceName
+						-ServiceName $dcCloudServiceName `
                         -WaitForBoot
 
         Get-AzureRemoteDesktopFile `
             -ServiceName $dcCloudServiceName `
             -Name $webServerName1 `
-            -LocalPath "$workingDir$webServerName1.rdp" 
+            -LocalPath "$workingDir$webServerName1.rdp"
+
+        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $webServerName1
     }
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName2
@@ -51,13 +53,15 @@
                 Set-AzureSubnet `
                     -SubnetNames $frontSubnetName |
 					New-AzureVM `
-						-ServiceName $dcCloudServiceName
+						-ServiceName $dcCloudServiceName `
                         -WaitForBoot
 
         Get-AzureRemoteDesktopFile `
             -ServiceName $dcCloudServiceName `
             -Name $webServerName2 `
-            -LocalPath "$workingDir$webServerName2.rdp" 
+            -LocalPath "$workingDir$webServerName2.rdp"
+
+        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $webServerName2
     }
 
 #TODO: create master\web1 share for slave\web2

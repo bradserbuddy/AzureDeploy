@@ -1,17 +1,18 @@
 ﻿function CreateMongo()
 {
-    $linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
+    #$linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
 
-    Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshCertificatePath
+    # SSH key\certificate info here:  http://azure.microsoft.com/en-us/documentation/articles/linux-use-ssh-key/
+    #Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshCertificatePath
 
-    $certificate = New-AzureSSHKey -PublicKey –Fingerprint $sshFingerprint –Path $sshPublicKeyPath
+    #$sshPublicKey = New-AzureSSHKey -PublicKey –Fingerprint $sshCertificateFingerprint –Path $sshPublicKeyPath
 
-    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
+    #$vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
 
-    if ($vm -eq $null)
-    {
+    #if ($vm -eq $null)
+    #{
         CreateMongoVM $mongoServerName1 20322
-    }
+    #}
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName2
 
@@ -23,7 +24,7 @@
 
 function CreateMongoVM($serverName, $port)
 {
-    New-AzureVMConfig `
+    <#New-AzureVMConfig `
         -Name $serverName `
         -InstanceSize Large `
         -ImageName $linuxImageName `
@@ -35,7 +36,7 @@ function CreateMongoVM($serverName, $port)
             -LinuxUser $vmAdminUser `
             -Password $vmAdminPassword `
             -NoSSHEndpoint `
-            -SSHPublicKeys $certificate |
+            -SSHPublicKeys $sshPublicKey |
             Set-AzureSubnet `
                 -SubnetNames $frontSubnetName |
 				New-AzureVM `
@@ -49,7 +50,7 @@ function CreateMongoVM($serverName, $port)
                                 -Protocol tcp `
                                 -PublicPort $port `
                                 -LocalPort 22 |
-                Update-AzureVM
+                Update-AzureVM#>
     
     InitializeSSH $port
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"

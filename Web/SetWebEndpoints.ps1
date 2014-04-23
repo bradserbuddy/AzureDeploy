@@ -1,25 +1,16 @@
 ﻿#TODO: verify firewall\Azure ports match up with bindings
 
-Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
-
-$ErrorActionPreference = "Stop"
-
-$workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
-
-. $workingDir"Common.ps1"
-. Common $workingDir
-
-function SetWebEndpoints($serverName)
+function SetWebEndpoints($serverName, $directApi, $directDevDash)
 {
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
         Add-AzureEndpoint -Name "Direct API" `
                             -Protocol tcp `
-                            -PublicPort 10080 `
-                            -LocalPort 10080 |
+                            -PublicPort $directApi `
+                            -LocalPort $directApi |
         Add-AzureEndpoint -Name "Direct Dev Dash" `
                             -Protocol tcp `
-                            -PublicPort 10081 `
-                            -LocalPort 10081 |
+                            -PublicPort $directDevDash `
+                            -LocalPort $directDevDash |
         Add-AzureEndpoint -Name "Http" `
                             -LBSetName "eus-http" `
                             -Protocol tcp `
@@ -35,5 +26,5 @@ function SetWebEndpoints($serverName)
             Update-AzureVM
 }
 
-SetWebEndpoints($webServerName1)
-SetWebEndpoints($webServerName2)
+SetWebEndpoints $webServerName1 10080 10081 
+SetWebEndpoints $webServerName2 10180 10181

@@ -1,4 +1,4 @@
-﻿function AddDbToAvailabilityGroup($databaseName)
+﻿function CreateSqlAvailabilityGroup($databaseName)
 {
     $backupShare = "\\$sql1ServerName\backup"
     $quorumShare = "\\$sql1ServerName\quorum"
@@ -9,19 +9,20 @@
 
 
 
-    #$backup = "C:\backup"
-    #New-Item $backup -ItemType directory
-    #net share backup=$backup "/grant:$sqlUserName1,FULL" "/grant:$sqlUserName2,FULL"   
-    #Import-Module SmbShare
+    $backup = "C:\backup"
+    New-Item $backup -ItemType directory
+    net share backup=$backup "/grant:$sqlUserName1,FULL" "/grant:$sqlUserName2,FULL"   
+    icacls.exe $backup /grant:r ("$sqlUserName1" + ":(OI)(CI)F") ("$sqlUserName2" + ":(OI)(CI)F") 
+
+    <# TODO: SmbShare module can't load for some reason
     $backupName = "backup"
     $backup = $null
-    try { $backup = Get-SMBShare $backupName } catch { }
+    try { $backup = Get-SmbShare $backupName } catch { }
     if ($backup -eq $null)
     {
-        New-SMBShare -Name $backupName -Path "c:\backup" -FullAccess $sqlUserName1, $sqlUserName2
+        New-SmbShare -Name $backupName -Path "c:\backup" -FullAccess $sqlUserName1, $sqlUserName2
     }
-    icacls.exe $backup.Path /grant:r ("$sqlUserName1" + ":(OI)(CI)F") ("$sqlUserName2" + ":(OI)(CI)F") 
-    #icacls.exe $backup /grant:r ("$sqlUserName1" + ":(OI)(CI)F") ("$sqlUserName2" + ":(OI)(CI)F") 
+    icacls.exe $backup.Path /grant:r ("$sqlUserName1" + ":(OI)(CI)F") ("$sqlUserName2" + ":(OI)(CI)F")#> 
     
  
     $sqlServer = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Server -ArgumentList "."

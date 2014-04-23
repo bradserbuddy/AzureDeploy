@@ -1,4 +1,4 @@
-﻿function CreateQuorum($workingDir)
+﻿function CreateQuorum()
 {
     $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
 
@@ -35,5 +35,7 @@
             -ServiceName $sqlCloudServiceName `
             -Name $quorumServerName `
             -LocalPath "$workingDir$quorumServerName.rdp"
+
+        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $sqlCloudServiceName -Name $quorumServerName
     }
 }

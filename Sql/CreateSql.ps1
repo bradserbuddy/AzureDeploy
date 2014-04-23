@@ -1,4 +1,4 @@
-﻿function CreateSql($workingDir)
+﻿function CreateSql()
 {
     . $workingDir"Sql\CopySqlImage.ps1"
     & CopySqlImage
@@ -36,10 +36,14 @@
                         -Protocol "tcp" `
                         -PublicPort 1 `
                         -LocalPort 1433 | 
-                         New-AzureVM -ServiceName $sqlCloudServiceName
+                         New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
-        . $workingDir"\Common\WaitForVM.ps1"
-        WaitAndDownloadRDF-ForVM $sqlCloudServiceName $sql1ServerName
+        Get-AzureRemoteDesktopFile `
+            -ServiceName $sqlCloudServiceName `
+            -Name $sql1ServerName `
+            -LocalPath "$workingDir$sql1ServerName.rdp" 
+
+        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $sqlCloudServiceName -Name $sql1ServerName
     }   
 
     # Create SQL 2
@@ -72,9 +76,13 @@
                         -Protocol "tcp" `
                         -PublicPort 2 `
                         -LocalPort 1433 | 
-                        New-AzureVM -ServiceName $sqlCloudServiceName
+                        New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
-        . $workingDir"\Common\WaitForVM.ps1"
-        WaitAndDownloadRDF-ForVM $sqlCloudServiceName $sql2ServerName
+        Get-AzureRemoteDesktopFile `
+            -ServiceName $sqlCloudServiceName `
+            -Name $sql1ServerName `
+            -LocalPath "$workingDir$sql2ServerName.rdp" 
+
+        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $sqlCloudServiceName -Name $sql2ServerName
     } 
 }

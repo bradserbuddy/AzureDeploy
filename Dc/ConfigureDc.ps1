@@ -16,7 +16,6 @@
                             -LogPath "C:\Windows\NTDS" `
                             -SYSVOLPath "C:\Windows\SYSVOL" `
                             -NoRebootOnCompletion
-        
     }
 
     RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $dcServerName $scriptBlock

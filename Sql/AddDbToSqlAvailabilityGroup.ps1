@@ -1,4 +1,4 @@
-﻿function AddDbToAvailabilityGroup($databaseName)
+﻿function AddDbToSqlAvailabilityGroup($databaseName)
 {
     $backupShare = "\\$sql1ServerName\backup"
     $quorumShare = "\\$sql1ServerName\quorum"

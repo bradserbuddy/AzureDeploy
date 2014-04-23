@@ -18,7 +18,3 @@ CreateSqlAvailabilityGroup "BuddyObjects"
 
 . $workingDir"Sql\AddDbToSqlAvailabilityGroup.ps1"
 AddDbToSqlAvailabilityGroup "buddy_queue"
-
-
-# Not in ISE!
-& $workingDir"External\ConfigureAGListenerCloudOnly.ps1" -AGName $sqlAvailabilityGroupName -ListenerName $sqlListenerName -ServiceName $sqlCloudServiceName -WSFCNodes $sql1ServerName,$sql2ServerName,$quorumServerName -DomainAccount "$domainNameAsPrefix$installUserName" -Password $dcUsersPassword

@@ -1,13 +1,16 @@
 ﻿function Settings()
 {
+    $location = "West US"
+	$locationAbbrev = "wus"
+
+
     $subscriptionName = "Windows Azure for BizSpark Plus"
+
 
     $delimiter = "-"
 	$clusterName = "b$($delimiter)v2"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
 	$clusterPrefix = "$clusterName$delimiter"
-    $location = "East US"
-	$locationAbbrev = "eus"
 
 
 	$clusterLocation = "$clusterPrefix$locationAbbrev"

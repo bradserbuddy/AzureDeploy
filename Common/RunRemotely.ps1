@@ -2,7 +2,7 @@
  {
     $session = GetSession $userName $password $cloudServiceName $serverName
 
-....Invoke-Command -Session $session –ScriptBlock $scriptBlock
+    Invoke-Command -Session $session –ScriptBlock $scriptBlock
 
     Remove-PSSession -Session $session
 }

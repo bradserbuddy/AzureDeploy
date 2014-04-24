@@ -9,6 +9,12 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . Common
 
 
+Write-Host "Install Availability Group Prep..."
+$session = GetSession "$domainNameAsPrefix$installUserName" $vmAdminPassword $sqlCloudServiceName $sql1ServerName
+Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallAvailabilityGroupPrep.ps1" -ArgumentList $sql1ServerName, $sqlUserName1, $sql2ServerName, $sqlUserName2, $vmAdminPassword
+Remove-PSSession -Session $session
+
+
 Add-WindowsFeature 'Failover-Clustering', 'RSAT-Clustering-PowerShell', 'RSAT-Clustering-CmdInterface'
 
 

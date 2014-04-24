@@ -6,8 +6,8 @@
 	$clusterName = "b$($delimiter)v2"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
 	$clusterPrefix = "$clusterName$delimiter"
-    $location = "West US"
-	$locationAbbrev = "wus"
+    $location = "East US"
+	$locationAbbrev = "eus"
 
 
 	$clusterLocation = "$clusterPrefix$locationAbbrev"
@@ -61,6 +61,8 @@
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
     $sqlClusterName = "$clusterLocation-SC" # must be a valid DNS name (15 character limit)?
     $sqlListenerName = "$clusterLocation-L" # must be a valid DNS name (15 character limit)
+    $endpointName = "ListenerEP" # 15 character limit
+    $lbSetName = "$endpointName-LB" # from ConfigureAGListenerCloudOnly.ps1
 
     $dataDiskSize = 100
 

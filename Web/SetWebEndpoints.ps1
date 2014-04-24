@@ -12,13 +12,13 @@ function SetWebEndpoints($serverName, $directApi, $directDevDash)
                             -PublicPort $directDevDash `
                             -LocalPort $directDevDash |
         Add-AzureEndpoint -Name "Http" `
-                            -LBSetName "eus-http" `
+                            -LBSetName "$locationAbbrev-http" `
                             -Protocol tcp `
                             -PublicPort 80 `
                             -LocalPort 80 `
                             -DefaultProbe |
         Add-AzureEndpoint -Name "Https" `
-                            -LBSetName "eus-ssl" `
+                            -LBSetName "$locationAbbrev-ssl" `
                             -Protocol tcp `
                             -PublicPort 443 `
                             -LocalPort 443 `

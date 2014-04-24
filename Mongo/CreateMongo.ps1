@@ -1,18 +1,18 @@
 ﻿function CreateMongo()
 {
-    #$linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
+    $linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
 
     # SSH key\certificate info here:  http://azure.microsoft.com/en-us/documentation/articles/linux-use-ssh-key/
-    #Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshCertificatePath
+    Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshLocalCertificatePath
 
-    #$sshPublicKey = New-AzureSSHKey -PublicKey –Fingerprint $sshCertificateFingerprint –Path $sshPublicKeyPath
+    $sshPublicKey = New-AzureSSHKey -PublicKey –Fingerprint $sshCertificateFingerprint –Path $sshRemotePublicKeyPath
 
-    #$vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
+    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
 
-    #if ($vm -eq $null)
-    #{
+    if ($vm -eq $null)
+    {
         CreateMongoVM $mongoServerName1 20322
-    #}
+    }
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName2
 
@@ -24,7 +24,7 @@
 
 function CreateMongoVM($serverName, $port)
 {
-    <#New-AzureVMConfig `
+    New-AzureVMConfig `
         -Name $serverName `
         -InstanceSize Large `
         -ImageName $linuxImageName `
@@ -35,7 +35,6 @@ function CreateMongoVM($serverName, $port)
             -Linux `
             -LinuxUser $vmAdminUser `
             -Password $vmAdminPassword `
-            -NoSSHEndpoint `
             -SSHPublicKeys $sshPublicKey |
             Set-AzureSubnet `
                 -SubnetNames $frontSubnetName |
@@ -50,7 +49,7 @@ function CreateMongoVM($serverName, $port)
                                 -Protocol tcp `
                                 -PublicPort $port `
                                 -LocalPort 22 |
-                Update-AzureVM#>
+                Update-AzureVM
     
     InitializeSSH $port
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
@@ -59,13 +58,8 @@ function CreateMongoVM($serverName, $port)
     RunSSH $port "sudo apt-get install mongodb-org"
     RunSSH $port "sudo chkconfig mongod on"
 
-<#
-echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
-sudo apt-get update
-sudo apt-get install mongodb-org
-sudo chkconfig mongod on
 
-sudo fdisk /dev/sdc < fdiskCommands.txt
+<#sudo fdisk /dev/sdc < fdiskCommands.txt
 sudo mkfs -t ext4 /dev/sdc1
 sudo mkdir /datadrive
 sudo mount /dev/sdc1 /datadrive
@@ -87,12 +81,12 @@ function InitializeSSH($port)
     # ssh.exe throws a warning when accepting the fingerprint
     try
     {
-        & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshPrivateKeyPath --% -o StrictHostKeyChecking=no '"cd"'
+        & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshLocalPrivateKeyPath --% -o StrictHostKeyChecking=no '"cd"'
     } catch {}
 }
 
 
 function RunSSH($port, $command)
 {
-    & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshPrivateKeyPath "$command"
+    & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshLocalPrivateKeyPath "$command" 2>&1 > "C:\logfile.log" 
 }

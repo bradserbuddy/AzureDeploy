@@ -59,14 +59,14 @@
     $sqlPassword = "sdbl,DTP"
 
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
-    $sqlClusterName = "$($clusterLocation)-SC" # must be a valid DNS name (15 character limit)?
-    $sqlListenerName = "$($clusterLocation)-L" # must be a valid DNS name (15 character limit)
+    $sqlClusterName = "$clusterLocation-SC" # must be a valid DNS name (15 character limit)?
+    $sqlListenerName = "$clusterLocation-L" # must be a valid DNS name (15 character limit)
 
     $dataDiskSize = 100
 
     $sshExePath = "C:\Program Files (x86)\git\bin\ssh.exe"
-    $sshCertificatePath = "C:\src\bran-the-builder\deploy_key.cer"
+    $sshLocalCertificatePath = "C:\src\bran-the-builder\deploy_key.cer"
     $sshCertificateFingerprint = "‎730dcef947d1ec2c31e3ea4b3f291dfee3be00fd"
-    $sshPublicKeyPath = "C:\src\bran-the-builder\deploy_key.rsa.pub"
-    $sshPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
+    $sshRemotePublicKeyPath = "/home/sysadmin/.ssh/authorized_keys"
+    $sshLocalPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
 }

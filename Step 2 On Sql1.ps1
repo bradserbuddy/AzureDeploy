@@ -16,6 +16,6 @@ Set-ExecutionPolicy Unrestricted -Force
 & $workingDir"External\CreateAzureFailoverCluster.ps1" -ClusterName $sqlClusterName -ClusterNodes $sql1ServerName, $sql2ServerName, $quorumServerName -Force
 
 
-echo "Install Availability Group..."
+Write-Host "Install Availability Group..."
 . $workingDir"Sql\InstallAvailabilityGroup.ps1"
 InstallAvailabilityGroup

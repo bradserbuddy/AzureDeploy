@@ -11,7 +11,7 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . $workingDir"Common\RunRemotely.ps1"
 
 
-echo "Install Databases in Availability Group..."
+Write-Host "Install Databases in Availability Group..."
 . $workingDir"Sql\CreateSqlAvailabilityGroup.ps1"
 CreateSqlAvailabilityGroup "BuddyObjects"
 

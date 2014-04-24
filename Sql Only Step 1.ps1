@@ -26,19 +26,6 @@ echo "Configuring Dc..."
 ConfigureDc
 
 
-echo "Creating Web..."
-. $workingDir"Web\CreateWeb.ps1"
-CreateWeb
-
-
-echo "Setting Web Endpoints..."
-. $workingDir"Web\SetWebEndpoints.ps1"
-
-
-#. $workingDir"Mongo\CreateMongo.ps1"
-#CreateMongo
-
-
 echo "Creating Quorum..."
 . $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum

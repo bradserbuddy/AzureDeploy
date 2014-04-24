@@ -67,8 +67,10 @@
     $dataDiskSize = 100
 
     $sshExePath = "C:\Program Files (x86)\git\bin\ssh.exe"
+    $scpExePath = "C:\Program Files (x86)\git\bin\scp.exe"
     $sshLocalCertificatePath = "C:\src\bran-the-builder\deploy_key.cer"
     $sshCertificateFingerprint = "‎730dcef947d1ec2c31e3ea4b3f291dfee3be00fd"
     $sshRemotePublicKeyPath = "/home/sysadmin/.ssh/authorized_keys"
+    $sshLocalPublicKeyPath = "C:\src\bran-the-builder\deploy_key.rsa.pub"
     $sshLocalPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
 }

@@ -35,8 +35,8 @@ echo "Setting Web Endpoints..."
 . $workingDir"Web\SetWebEndpoints.ps1"
 
 
-#. $workingDir"Mongo\CreateMongo.ps1"
-#CreateMongo
+. $workingDir"Mongo\CreateMongo.ps1"
+CreateMongo
 
 
 echo "Creating Quorum..."

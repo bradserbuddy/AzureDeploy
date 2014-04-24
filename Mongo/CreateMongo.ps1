@@ -24,6 +24,8 @@
 
 function CreateMongoVM($serverName, $port)
 {
+    #TODO: -SSHPublicKeys isn't adding the public key to authorized_keys, try ~.ssh/authorized_keys for $sshRemotePublicKeyPath?
+
     New-AzureVMConfig `
         -Name $serverName `
         -InstanceSize Large `
@@ -35,6 +37,7 @@ function CreateMongoVM($serverName, $port)
             -Linux `
             -LinuxUser $vmAdminUser `
             -Password $vmAdminPassword `
+            -NoSSHEndpoint `
             -SSHPublicKeys $sshPublicKey |
             Set-AzureSubnet `
                 -SubnetNames $frontSubnetName |
@@ -51,7 +54,9 @@ function CreateMongoVM($serverName, $port)
                                 -LocalPort 22 |
                 Update-AzureVM
     
+<#  
     InitializeSSH $port
+    UploadSSHPublicKey $port
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
     RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
     RunSSH $port "sudo apt-get update"
@@ -59,7 +64,7 @@ function CreateMongoVM($serverName, $port)
     RunSSH $port "sudo chkconfig mongod on"
 
 
-<#sudo fdisk /dev/sdc < fdiskCommands.txt
+sudo fdisk /dev/sdc < fdiskCommands.txt
 sudo mkfs -t ext4 /dev/sdc1
 sudo mkdir /datadrive
 sudo mount /dev/sdc1 /datadrive
@@ -75,7 +80,8 @@ use admin
 db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 exit #>
 }
- 
+
+
 function InitializeSSH($port)
 {
     # ssh.exe throws a warning when accepting the fingerprint
@@ -83,6 +89,12 @@ function InitializeSSH($port)
     {
         & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshLocalPrivateKeyPath --% -o StrictHostKeyChecking=no '"cd"'
     } catch {}
+}
+
+ 
+function UploadSSHPublicKey($port)
+{
+    & $scpExePath "$sshLocalPublicKeyPath" "$vmAdminUser@$dcCloudServiceName.cloudapp.net:~.ssh/authorized_keys" -p $port -i $sshLocalPrivateKeyPath
 }
 
 

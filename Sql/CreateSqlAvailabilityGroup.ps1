@@ -64,6 +64,8 @@
     Join-SqlAvailabilityGroup `
         -Path "SQLSERVER:\SQL\$sql2ServerName\Default" `
         -Name $sqlAvailabilityGroupName
+
+
     Add-SqlAvailabilityDatabase `
         -Path "SQLSERVER:\SQL\$sql2ServerName\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
         -Database $databaseName

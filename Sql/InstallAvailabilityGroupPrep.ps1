@@ -1,6 +1,4 @@
-﻿param($sql1ServerName, $sqlUserName1, $sql2ServerName, $sqlUserName2, $vmAdminPassword)
-
-function InstallAvailabilityGroupPrep($sqlServerName, $sqlUserName, $vmAdminPassword)
+﻿function InstallAvailabilityGroupPrep($sqlServerName, $sqlUserName, $vmAdminPassword)
 {
     $timeout = New-Object System.TimeSpan -ArgumentList 0, 0, 30
 
@@ -15,6 +13,3 @@ function InstallAvailabilityGroupPrep($sqlServerName, $sqlUserName, $vmAdminPass
     $svc.Start(); 
     $svc.WaitForStatus([System.ServiceProcess.ServiceControllerStatus]::Running,$timeout)
 }
-
-InstallAvailabilityGroupPrep $sql1ServerName, $sqlUserName1, $vmAdminPassword
-InstallAvailabilityGroupPrep $sql2ServerName, $sqlUserName2, $vmAdminPassword

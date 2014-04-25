@@ -2,6 +2,8 @@
 
 function Common()
 {
+    . $workingDir"Common\WriteStatus.ps1"
+
     . $workingDir"Common\Settings.ps1"
     . Settings # Called with dot source, so the settings variables are global
 

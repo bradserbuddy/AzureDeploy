@@ -94,7 +94,9 @@ function InitializeSSH($port)
  
 function UploadSSHPublicKey($port)
 {
-    & $scpExePath "$sshLocalPublicKeyPath" "$vmAdminUser@$dcCloudServiceName.cloudapp.net:~.ssh/authorized_keys" -p $port -i $sshLocalPrivateKeyPath
+    $nameAndHost = "$vmAdminUser@$dcCloudServiceName.cloudapp.net"
+
+    & "C:\Program Files\TortoiseGit\bin\TortoiseGitPlink.exe" -ssh -P $port "sysadmin@b-v2-eus-dc.cloudapp.net" -pw "$($vmAdminPassword)" "scp "$($nameAndHost)" "$($nameAndHost):~.ssh/authorized_keys""
 }
 
 

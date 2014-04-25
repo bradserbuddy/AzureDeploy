@@ -8,8 +8,6 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . $workingDir"Common.ps1"
 . Common
 
-. $workingDir"Common\RunRemotely.ps1"
-
 
 Write-Host "Install Databases in Availability Group..."
 . $workingDir"Sql\CreateSqlAvailabilityGroup.ps1"

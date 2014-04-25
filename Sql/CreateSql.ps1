@@ -35,7 +35,7 @@
                         -Name "SQL" `
                         -Protocol "tcp" `
                         -PublicPort 1 `
-                        -LocalPort 1433 | 
+                        -LocalPort 1434 | 
                          New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
         Get-AzureRemoteDesktopFile `
@@ -75,7 +75,7 @@
                         -Name "SQL" `
                         -Protocol "tcp" `
                         -PublicPort 2 `
-                        -LocalPort 1433 | 
+                        -LocalPort 1434 | 
                         New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
         Get-AzureRemoteDesktopFile `

@@ -59,25 +59,25 @@ function CreateMongoVM($serverName, $port)
     UploadSSHPublicKey $port
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
     RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
-    RunSSH $port "sudo apt-get update"
-    RunSSH $port "sudo apt-get install mongodb-org"
-    RunSSH $port "sudo chkconfig mongod on"
-
+    RunSSH $port "sudo apt-get -y update"
+    RunSSH $port "sudo apt-get -y install mongodb-org"
+    RunSSH $port "sudo service mongod stop"
 
 sudo fdisk /dev/sdc < fdiskCommands.txt
 sudo mkfs -t ext4 /dev/sdc1
 sudo mkdir /datadrive
 sudo mount /dev/sdc1 /datadrive
 sudo -i blkid | grep sdc1 | sed -r 's/.*(UUID=\"[0-9a-f-]{36}\").*/\1/' | sed 's/$/ \/datadrive ext4 defaults 0 2/' | sudo tee -a /etc/fstab
+sudo umount /datadrive
 sudo mount /datadrive
-sudo cat /etc/mongodb.conf | sudo sed -e 's/dbpath=\/data\/db//dbpath=\/datadrive\/db/' > /etc/mongodb.conf
-sudo mkdir -p /datadrive/db
-sudo chown -R mongodb:nogroup /datadrive/db
-sudo chgrp -R mongodb:nogroup /datadrive/db
-sudo service mongod start
+sudo cat /etc/mongod.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongod.conf
+sudo mkdir -p /datadrive/mongodb
+sudo chown -R mongodb:mongodb /datadrive/mongodb
+sudo service mongodb start on startup
 
+mongo
 use admin
-db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 exit #>
 }
 

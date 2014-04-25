@@ -60,8 +60,18 @@ function CreateMongoVM($serverName, $port)
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
     RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
     RunSSH $port "sudo apt-get -y update"
-    RunSSH $port "sudo apt-get -y install mongodb-org"
-    RunSSH $port "sudo service mongod stop"
+
+    RunSSH $port "sudo apt-get -y install mongodb-10gen=2.4.10"
+    RunSSH $port "echo "mongodb-10gen hold" | sudo dpkg --set-selections"
+# 2.6 RunSSH $port "apt-get install mongodb-org=2.6.0 mongodb-org-server=2.6.0 mongodb-org-shell=2.6.0 mongodb-org-mongos=2.6.0 mongodb-org-tools=2.6.0"
+# 2.6 RunSSH $port "echo "mongodb-org hold" | sudo dpkg --set-selections"
+# 2.6 RunSSH $port "echo "mongodb-org-server hold" | sudo dpkg --set-selections"
+# 2.6 RunSSH $port "echo "mongodb-org-shell hold" | sudo dpkg --set-selections"
+# 2.6 RunSSH $port "echo "mongodb-org-mongos hold" | sudo dpkg --set-selections"
+# 2.6 RunSSH $port "echo "mongodb-org-tools hold" | sudo dpkg --set-selections"
+
+    RunSSH $port "sudo service mongodb stop"
+# 2.6 RunSSH $port "sudo service mongod stop"
 
 sudo fdisk /dev/sdc < fdiskCommands.txt
 sudo mkfs -t ext4 /dev/sdc1
@@ -70,14 +80,17 @@ sudo mount /dev/sdc1 /datadrive
 sudo -i blkid | grep sdc1 | sed -r 's/.*(UUID=\"[0-9a-f-]{36}\").*/\1/' | sed 's/$/ \/datadrive ext4 defaults 0 2/' | sudo tee -a /etc/fstab
 sudo umount /datadrive
 sudo mount /datadrive
-sudo cat /etc/mongod.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongod.conf
+
+sudo cat /etc/mongodb.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongodb.conf
+# 2.6 sudo cat /etc/mongod.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongod.conf
+
 sudo mkdir -p /datadrive/mongodb
 sudo chown -R mongodb:mongodb /datadrive/mongodb
-sudo service mongodb start on startup
 
 mongo
 use admin
-db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+# 2.6 db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 exit #>
 }
 

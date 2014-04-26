@@ -46,7 +46,7 @@ CreateQuorum
 
 
 Write-Status "Setting SSH Endpoints..."
-. $workingDir"Common\SetSSHEndpoints.ps1"
+. $workingDir"Common\SetSshEndpoints.ps1"
 
 
 Write-Status "Installing Quorum Failover Clustering..."

@@ -59,7 +59,7 @@
 
     $sql1ServerName = "$locationAbbrev-40-sql1"
     $sql2ServerName = "$locationAbbrev-40-sql2"
-    $sqlPassword = "sdbl,DTP98033"
+    $sqlPassword = "sdbl,DTP" # Needs to be the same password as used in SQl Image creation
 
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
     $sqlClusterName = "$locationAbbrev-SC" # must be a valid DNS name (15 character limit)?

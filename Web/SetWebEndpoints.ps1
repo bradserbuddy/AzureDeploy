@@ -1,14 +1,14 @@
-﻿function SetWebEndpoints($serverName, $directApi, $directDevDash)
+﻿function SetWebEndpoints($serverName, $apiName, $apiPort, $devDashName, $devDashPort)
 {
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
-        Add-AzureEndpoint -Name "Direct API" `
+        Add-AzureEndpoint -Name $apiName `
                             -Protocol tcp `
-                            -PublicPort $directApi `
-                            -LocalPort $directApi |
-        Add-AzureEndpoint -Name "Direct Dev Dash" `
+                            -PublicPort $apiPort `
+                            -LocalPort $apiPort |
+        Add-AzureEndpoint -Name $devDashName `
                             -Protocol tcp `
-                            -PublicPort $directDevDash `
-                            -LocalPort $directDevDash |
+                            -PublicPort $devDashPort `
+                            -LocalPort $devDashPort |
         Add-AzureEndpoint -Name "Http" `
                             -LBSetName "$locationAbbrev-http" `
                             -Protocol tcp `
@@ -30,8 +30,8 @@
             Update-AzureVM
 }
 
-SetWebEndpoints $webServerName1 9080 9081 
-SetWebEndpoints $webServerName2 9180 9181
+SetWebEndpoints $webServerName1 "Test API" 9080 9081 
+SetWebEndpoints $webServerName2 "Test Dev Dash" 9180 9181
 
-SetWebEndpoints $webServerName1 10080 10081 
-SetWebEndpoints $webServerName2 10180 10181
+SetWebEndpoints $webServerName1 "Direct API" 10080 10081 
+SetWebEndpoints $webServerName2 "Direct Dev Dash" 10180 10181

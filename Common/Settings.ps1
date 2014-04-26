@@ -49,8 +49,8 @@
     $sqlUserName2 = "$domainName\$sqlDcUserName2"
     $installUserName = "Install"
 
-    $webServerName1 = "$locationAbbrev-0-web1"
-    $webServerName2 = "$locationAbbrev-1-web2"
+    $webServerName1 = "$locationAbbrev-00-web1"
+    $webServerName2 = "$locationAbbrev-01-web2"
 
     $mongoServerName1 = "$locationAbbrev-20-m1"
     $mongoServerName2 = "$locationAbbrev-21-m2"

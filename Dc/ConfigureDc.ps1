@@ -22,8 +22,8 @@
 
     Restart-AzureVM -ServiceName $dcCloudServiceName -Name $dcServerName
 
-    Write-Status "Wait for $dcServerName restart..."
-    $HOST.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | OUT-NULL
+    Write-Status "Wait for $dcServerName restart.  Hit Enter."
+    Read-Host
 
     . $workingDir"Dc\AddDcUsers.ps1"
     AddDCUsers

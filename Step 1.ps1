@@ -11,56 +11,56 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . $workingDir"Common\RunRemotely.ps1"
 
 
-Write-Host "Adding Virtual Network..."
+Write-Status "Adding Virtual Network..."
 . $workingDir"Add-VirtualNetworkSite.ps1"
 Add-VirtualNetworkSite $virtualNetworkName $affinityGroupName "10.10.0.0/16" "10.10.1.0/24" "10.10.2.0/24"
 
 
-Write-Host "Creating Dc..."
+Write-Status "Creating Dc..."
 . $workingDir"Dc\CreateDc.ps1"
 CreateDc
 
 
-Write-Host "Configuring Dc..."
+Write-Status "Configuring Dc..."
 . $workingDir"Dc\ConfigureDc.ps1"
 ConfigureDc
 
 
-Write-Host "Creating Web..."
+Write-Status "Creating Web..."
 . $workingDir"Web\CreateWeb.ps1"
 CreateWeb
 
 
-Write-Host "Setting Web Endpoints..."
+Write-Status "Setting Web Endpoints..."
 . $workingDir"Web\SetWebEndpoints.ps1"
 
 
-Write-Host "Create Mongo..."
+Write-Status "Create Mongo..."
 . $workingDir"Mongo\CreateMongo.ps1"
 CreateMongo
 
 
-Write-Host "Creating Quorum..."
+Write-Status "Creating Quorum..."
 . $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum
 
 
-Write-Host "Setting SSH Endpoints..."
+Write-Status "Setting SSH Endpoints..."
 . $workingDir"Common\SetSSHEndpoints.ps1"
 
 
-Write-Host "Installing Quorum Failover Clustering..."
+Write-Status "Installing Quorum Failover Clustering..."
 $session = GetSession $vmAdminUser $vmAdminPassword $sqlCloudServiceName $quorumServerName
 Invoke-Command -Session $session -FilePath $workingDir"Quorum\InstallQuorumFailoverClustering.ps1" -ArgumentList $domainNameAsPrefix, $installUserName
 Remove-PSSession -Session $session
 
 
-Write-Host "Creating Sql..."
+Write-Status "Creating Sql..."
 . $workingDir"Sql\CreateSql.ps1"
 CreateSql
 
 
-Write-Host "Installing Sql Failover Clustering..."
+Write-Status "Installing Sql Failover Clustering..."
 $session = GetSession $vmAdminUser $vmAdminPassword $sqlCloudServiceName $sql1ServerName
 Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallSqlFailoverClustering.ps1" -ArgumentList $domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlPassword
 Remove-PSSession -Session $session
@@ -69,4 +69,4 @@ Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallSqlFailoverClu
 Remove-PSSession -Session $session
 
 
-Write-Host "Done!"
+Write-Status "Done!"

@@ -9,7 +9,7 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . Common
 
 
-Write-Host "Install Availability Group Prep..."
+Write-Status "Install Availability Group Prep..."
 . $workingDir"Sql\InstallAvailabilityGroupPrep.ps1"
 InstallAvailabilityGroupPrep $sql1ServerName $sqlUserName1 $vmAdminPassword
 InstallAvailabilityGroupPrep $sql2ServerName $sqlUserName2 $vmAdminPassword
@@ -22,6 +22,6 @@ Set-ExecutionPolicy Unrestricted -Force
 & $workingDir"External\CreateAzureFailoverCluster.ps1" -ClusterName $sqlClusterName -ClusterNodes $sql1ServerName, $sql2ServerName, $quorumServerName -Force
 
 
-Write-Host "Install Availability Group..."
+Write-Status "Install Availability Group..."
 . $workingDir"Sql\InstallAvailabilityGroup.ps1"
 InstallAvailabilityGroup

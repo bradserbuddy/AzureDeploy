@@ -9,7 +9,7 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . Common
 
 
-Write-Host "Install Databases in Availability Group..."
+Write-Status "Install Databases in Availability Group..."
 . $workingDir"Sql\CreateSqlAvailabilityGroup.ps1"
 CreateSqlAvailabilityGroup "BuddyObjects"
 

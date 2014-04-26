@@ -26,14 +26,14 @@
     $storageAccountContainer = "https://" + $storageAccountName + ".blob.core.windows.net/vhds/"
 
     $azureAvailabilitySetName = "$clusterLocation Availability Set"
-    $dcCloudServiceName = "$clusterLocation-dc" 
+    $dcCloudServiceName = "$clusterLocation" 
     $sqlCloudServiceName  = "$clusterLocation-sql" 
 
     $vmAdminUser = "sysadmin" 
     $vmAdminPassword = "!Bubbajoe5312"
 
     $domainName= "corp"
-	$buddyplatformDomainName = "buddy"
+	$buddyplatformDomainName = "buddyplatform"
     $FQDN = "$domainName.$($buddyplatformDomainName).com"
     $domainName = $domainName.ToUpperInvariant()
  	$domainNameAsPrefix = "$domainName\"
@@ -41,7 +41,7 @@
     $backSubnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
-    $dcServerName = "$clusterLocation-dc" # must be a valid DNS name (15 character limit)
+    $dcServerName = "$locationAbbrev-10-q1" # must be a valid DNS name (15 character limit)
     $dcUsersPassword = "!Bubbajoe5312"
     $sqlDcUserName1 = "SQLSvc1"
     $sqlDcUserName2 = "SQLSvc2"
@@ -49,21 +49,21 @@
     $sqlUserName2 = "$domainName\$sqlDcUserName2"
     $installUserName = "Install"
 
-    $webServerName1 = "$clusterLocation-web1"
-    $webServerName2 = "$clusterLocation-web2"
+    $webServerName1 = "$locationAbbrev-0-web1"
+    $webServerName2 = "$locationAbbrev-1-web2"
 
-    $mongoServerName1 = "$clusterLocation-m1"
-    $mongoServerName2 = "$clusterLocation-m2"
+    $mongoServerName1 = "$locationAbbrev-20-m1"
+    $mongoServerName2 = "$locationAbbrev-21-m2"
 
-    $quorumServerName = "$clusterLocation-qm" # 15 character limit
+    $quorumServerName = "$locationAbbrev-30-qm1" # 15 character limit
 
-    $sql1ServerName = "$clusterLocation-sql1"
-    $sql2ServerName = "$clusterLocation-sql2"
-    $sqlPassword = "sdbl,DTP"
+    $sql1ServerName = "$locationAbbrev-40-sql1"
+    $sql2ServerName = "$locationAbbrev-40-sql2"
+    $sqlPassword = "sdbl,DTP98033"
 
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
-    $sqlClusterName = "$clusterLocation-SC" # must be a valid DNS name (15 character limit)?
-    $sqlListenerName = "$clusterLocation-L" # must be a valid DNS name (15 character limit)
+    $sqlClusterName = "$locationAbbrev-SC" # must be a valid DNS name (15 character limit)?
+    $sqlListenerName = "$locationAbbrev-L" # must be a valid DNS name (15 character limit)
     $endpointName = "ListenerEP" # 15 character limit
     $lbSetName = "$endpointName-LB" # from ConfigureAGListenerCloudOnly.ps1
 

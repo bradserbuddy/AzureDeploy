@@ -1,6 +1,4 @@
-﻿#TODO: verify firewall\Azure ports match up with bindings
-
-function SetWebEndpoints($serverName, $directApi, $directDevDash)
+﻿function SetWebEndpoints($serverName, $directApi, $directDevDash)
 {
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
         Add-AzureEndpoint -Name "Direct API" `
@@ -17,6 +15,12 @@ function SetWebEndpoints($serverName, $directApi, $directDevDash)
                             -PublicPort 80 `
                             -LocalPort 80 `
                             -DefaultProbe |
+        Add-AzureEndpoint -Name "Http Dev Dash" `
+                            -LBSetName "$locationAbbrev-http-dd" `
+                            -Protocol tcp `
+                            -PublicPort 81 `
+                            -LocalPort 81 `
+                            -DefaultProbe |
         Add-AzureEndpoint -Name "Https" `
                             -LBSetName "$locationAbbrev-ssl" `
                             -Protocol tcp `
@@ -25,6 +29,9 @@ function SetWebEndpoints($serverName, $directApi, $directDevDash)
                             -DefaultProbe |
             Update-AzureVM
 }
+
+SetWebEndpoints $webServerName1 9080 9081 
+SetWebEndpoints $webServerName2 9180 9181
 
 SetWebEndpoints $webServerName1 10080 10081 
 SetWebEndpoints $webServerName2 10180 10181

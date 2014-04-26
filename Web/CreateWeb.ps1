@@ -64,5 +64,6 @@
         . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $webServerName2
     }
 
-#TODO: create master\web1 share for slave\web2
+    # mkdir c:\buddyapps 
+    # NET SHARE buddyapps=c:\buddyapps /GRANT:Everyone,FULL
 }

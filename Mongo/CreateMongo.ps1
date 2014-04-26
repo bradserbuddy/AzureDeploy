@@ -83,6 +83,8 @@ sudo mount /datadrive
 
 sudo cat /etc/mongodb.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongodb.conf
 # 2.6 sudo cat /etc/mongod.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongod.conf
+# replace $locationAbbrev
+sudo cat /etc/mongodb.conf | sed 's/# replSet = setname/replSet = $locationAbbrev0/' | sudo tee /etc/mongodb.conf
 
 sudo mkdir -p /datadrive/mongodb
 sudo chown -R mongodb:mongodb /datadrive/mongodb
@@ -91,6 +93,13 @@ mongo
 use admin
 db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 # 2.6 db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+rs.initiate()
+rs.add("wus-20-m1")  -- may have to use IP addresses
+rs.add("wus-21-m2")
+rs.conf()
+rs.status()
+
+
 exit #>
 }
 

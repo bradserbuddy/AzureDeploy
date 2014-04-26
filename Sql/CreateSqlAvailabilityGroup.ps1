@@ -14,7 +14,7 @@
     net share backup=$backup "/grant:$sqlUserName1,FULL" "/grant:$sqlUserName2,FULL"   
     icacls.exe $backup /grant:r ("$sqlUserName1" + ":(OI)(CI)F") ("$sqlUserName2" + ":(OI)(CI)F") 
 
-    <# TODO: SmbShare module can't load for some reason
+    <# TODO: SmbShare doesn't work in the PowerShell ISE
     $backupName = "backup"
     $backup = $null
     try { $backup = Get-SmbShare $backupName } catch { }

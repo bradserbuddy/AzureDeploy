@@ -35,6 +35,7 @@ Write-Host "Setting Web Endpoints..."
 . $workingDir"Web\SetWebEndpoints.ps1"
 
 
+Write-Host "Create Mongo..."
 . $workingDir"Mongo\CreateMongo.ps1"
 CreateMongo
 
@@ -42,6 +43,10 @@ CreateMongo
 Write-Host "Creating Quorum..."
 . $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum
+
+
+Write-Host "Setting SSH Endpoints..."
+. $workingDir"Common\SetSSHEndpoints.ps1"
 
 
 Write-Host "Installing Quorum Failover Clustering..."

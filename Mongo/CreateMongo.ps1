@@ -48,11 +48,7 @@ function CreateMongoVM($serverName, $port)
     # Can't chain because of -WaitForBoot
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
         Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Mongo" -LUN 0 |
-            Add-AzureEndpoint -Name "SSH" `
-                                -Protocol tcp `
-                                -PublicPort $port `
-                                -LocalPort 22 |
-                Update-AzureVM
+            Update-AzureVM
     
 <#  
     InitializeSSH $port

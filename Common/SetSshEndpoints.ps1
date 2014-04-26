@@ -1,4 +1,4 @@
-﻿function SetWebEndpoints($serverName, $port)
+﻿function SetSshEndpoints($serverName, $port)
 {
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
         Add-AzureEndpoint -Name "SSH" `

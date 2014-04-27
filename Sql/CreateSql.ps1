@@ -38,6 +38,10 @@
                         -LocalPort 1434 | 
                          New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
+        Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql1ServerName |
+            Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "SQL" -LUN 0 |
+                Update-AzureVM
+
         Get-AzureRemoteDesktopFile `
             -ServiceName $sqlCloudServiceName `
             -Name $sql1ServerName `
@@ -78,9 +82,13 @@
                         -LocalPort 1434 | 
                         New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
+        Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sql2ServerName |
+            Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "SQL" -LUN 0 |
+                Update-AzureVM
+
         Get-AzureRemoteDesktopFile `
             -ServiceName $sqlCloudServiceName `
-            -Name $sql1ServerName `
+            -Name $sql2ServerName `
             -LocalPath "$workingDir$sql2ServerName.rdp" 
 
         . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $sqlCloudServiceName -Name $sql2ServerName

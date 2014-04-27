@@ -41,7 +41,7 @@
     $backSubnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
-    $dcServerName = "$locationAbbrev-10-q1" # must be a valid DNS name (15 character limit)
+    $dcServerName = "$locationAbbrev-10-Q1" # must be a valid DNS name (15 character limit)
     $dcUsersPassword = "!Bubbajoe5312"
     $sqlDcUserName1 = "SQLSvc1"
     $sqlDcUserName2 = "SQLSvc2"

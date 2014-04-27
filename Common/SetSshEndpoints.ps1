@@ -10,6 +10,6 @@
 
 SetSshEndpoints $webServerName1   20022 
 SetSshEndpoints $webServerName2   20122
-SetSshEndpoints $dcServerName2    21022
+SetSshEndpoints $dcServerName     21022
 SetSshEndpoints $mongoServerName1 22022
 SetSshEndpoints $mongoServerName2 22122

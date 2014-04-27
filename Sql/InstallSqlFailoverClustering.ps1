@@ -1,4 +1,4 @@
-﻿param($domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlPassword)
+﻿param($domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlPassword, $sqlServerAdminUserName)
 
 function InstallSqlFailoverClustering()
 {

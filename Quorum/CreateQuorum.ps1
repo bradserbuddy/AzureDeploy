@@ -8,7 +8,7 @@
     {
         New-AzureVMConfig `
             -Name $quorumServerName `
-            -InstanceSize Medium `
+            -InstanceSize Small `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$quorumServerName.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `

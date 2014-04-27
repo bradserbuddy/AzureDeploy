@@ -40,6 +40,11 @@ Write-Status "Create Mongo..."
 CreateMongo
 
 
+Write-Status "Create Staging..."
+. $workingDir"Staging\CreateStaging.ps1"
+CreateStaging
+
+
 Write-Status "Creating Quorum..."
 . $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum
@@ -58,15 +63,6 @@ Remove-PSSession -Session $session
 Write-Status "Creating Sql..."
 . $workingDir"Sql\CreateSql.ps1"
 CreateSql
-
-
-Write-Status "Installing Sql Failover Clustering..."
-$session = GetSession $vmAdminUser $vmAdminPassword $sqlCloudServiceName $sql1ServerName
-Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallSqlFailoverClustering.ps1" -ArgumentList $domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlPassword
-Remove-PSSession -Session $session
-$session = GetSession $vmAdminUser $vmAdminPassword $sqlCloudServiceName $sql2ServerName
-Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallSqlFailoverClustering.ps1" -ArgumentList $domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlPassword
-Remove-PSSession -Session $session
 
 
 Write-Status "Done!"

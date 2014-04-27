@@ -1,14 +1,14 @@
 ﻿function Settings()
 {
     $location = "West US"
-	$locationAbbrev = "wus"
+	$locationAbbrev = "US-W"
 
 
     $subscriptionName = "Windows Azure for BizSpark Plus"
 
 
     $delimiter = "-"
-	$clusterName = "b$($delimiter)v2"
+	$clusterName = "B"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
 	$clusterPrefix = "$clusterName$delimiter"
 
@@ -27,7 +27,7 @@
 
     $azureAvailabilitySetName = "$clusterLocation Availability Set"
     $dcCloudServiceName = "$clusterLocation" 
-    $sqlCloudServiceName  = "$clusterLocation-sql" 
+    $sqlCloudServiceName  = "$clusterLocation-SQL" 
 
     $vmAdminUser = "sysadmin" 
     $vmAdminPassword = "!Bubbajoe5312"
@@ -48,18 +48,21 @@
     $sqlUserName1 = "$domainName\$sqlDcUserName1"
     $sqlUserName2 = "$domainName\$sqlDcUserName2"
     $installUserName = "Install"
+    $sqlServerAdminUserName = "sa"
+    $sqlPassword = "sdbl,DTP98033" # Needs to be the same password as used in SQL Image creation
 
-    $webServerName1 = "$locationAbbrev-00-web1"
-    $webServerName2 = "$locationAbbrev-01-web2"
+    $webServerName1 = "$locationAbbrev-00-W1"
+    $webServerName2 = "$locationAbbrev-01-W2"
 
-    $mongoServerName1 = "$locationAbbrev-20-m1"
-    $mongoServerName2 = "$locationAbbrev-21-m2"
+    $mongoServerName1 = "$locationAbbrev-20-M1"
+    $mongoServerName2 = "$locationAbbrev-21-M2"
 
-    $quorumServerName = "$locationAbbrev-30-qm1" # 15 character limit
+    $stagingServerName = "$locationAbbrev-50-S1"
 
-    $sql1ServerName = "$locationAbbrev-40-sql1"
-    $sql2ServerName = "$locationAbbrev-40-sql2"
-    $sqlPassword = "sdbl,DTP" # Needs to be the same password as used in SQl Image creation
+    $quorumServerName = "$locationAbbrev-30-QM1" # 15 character limit
+
+    $sql1ServerName = "$locationAbbrev-40-SQL1"
+    $sql2ServerName = "$locationAbbrev-41-SQL2"
 
     $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
     $sqlClusterName = "$locationAbbrev-SC" # must be a valid DNS name (15 character limit)?

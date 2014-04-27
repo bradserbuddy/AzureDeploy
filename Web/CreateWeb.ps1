@@ -1,7 +1,5 @@
 ﻿function CreateWeb()
 {
-    # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
-
     $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName1

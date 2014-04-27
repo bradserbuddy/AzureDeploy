@@ -21,7 +21,7 @@
 
     $virtualNetworkName = "$capitalizedClusterName $location NET"
 
-    $storageAccountName = $clusterLocation.Replace($delimiter, "") # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+    $storageAccountName = $clusterLocation.Replace($delimiter, "").ToLowerInvariant() # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
     $storageAccountLabel = "$capitalizedClusterName $location Storage Account"
     $storageAccountContainer = "https://" + $storageAccountName + ".blob.core.windows.net/vhds/"
 

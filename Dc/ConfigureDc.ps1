@@ -15,7 +15,8 @@
                             -ForestMode Win2012 `
                             -LogPath "C:\Windows\NTDS" `
                             -SYSVOLPath "C:\Windows\SYSVOL" `
-                            -NoRebootOnCompletion
+                            -NoRebootOnCompletion `
+                            -Force
     }
 
     RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $dcServerName $scriptBlock

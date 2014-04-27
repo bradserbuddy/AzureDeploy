@@ -40,6 +40,10 @@ Write-Status "Create Mongo..."
 CreateMongo
 
 
+Write-Status "Setting SSH Endpoints..."
+. $workingDir"Common\SetSshEndpoints.ps1"
+
+
 Write-Status "Create Staging..."
 . $workingDir"Staging\CreateStaging.ps1"
 CreateStaging
@@ -48,10 +52,6 @@ CreateStaging
 Write-Status "Creating Quorum..."
 . $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum
-
-
-Write-Status "Setting SSH Endpoints..."
-. $workingDir"Common\SetSshEndpoints.ps1"
 
 
 Write-Status "Installing Quorum Failover Clustering..."

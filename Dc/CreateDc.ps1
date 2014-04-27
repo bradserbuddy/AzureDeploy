@@ -1,6 +1,6 @@
 ﻿function CreateDc()
 {
-    # Missing -> Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None.
+    # TODO: Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None. - not sure how important this is
 
     $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
 

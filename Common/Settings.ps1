@@ -1,5 +1,7 @@
 ﻿function Settings()
 {
+    #$location = "West Europe"
+	#$locationAbbrev = "EU-W"
     $location = "West US"
 	$locationAbbrev = "US-W"
 
@@ -49,7 +51,7 @@
     $sqlUserName2 = "$domainName\$sqlDcUserName2"
     $installUserName = "Install"
     $sqlServerAdminUserName = "sa"
-    $sqlPassword = "sdbl,DTP98033" # Needs to be the same password as used in SQL Image creation
+    $sqlServerAdminPassword = "sdbl,DTP" # Needs to be the same password as used in SQL Image creation
 
     $webServerName1 = "$locationAbbrev-00-W1"
     $webServerName2 = "$locationAbbrev-01-W2"

@@ -28,7 +28,7 @@ function CreateMongoVM($serverName, $port)
 
     New-AzureVMConfig `
         -Name $serverName `
-        -InstanceSize Large `
+        -InstanceSize A3 `
         -ImageName $linuxImageName `
         -MediaLocation "$storageAccountContainer$serverName.vhd" `
         -AvailabilitySetName $azureAvailabilitySetName `
@@ -77,24 +77,33 @@ sudo -i blkid | grep sdc1 | sed -r 's/.*(UUID=\"[0-9a-f-]{36}\").*/\1/' | sed 's
 sudo umount /datadrive
 sudo mount /datadrive
 
-sudo cat /etc/mongodb.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongodb.conf
+#sudo cat /etc/mongodb.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongodb.conf -- verify this is working
 # 2.6 sudo cat /etc/mongod.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongod.conf
 # replace $locationAbbrev
-sudo cat /etc/mongodb.conf | sed 's/# replSet = setname/replSet = $locationAbbrev0/' | sudo tee /etc/mongodb.conf
+#sudo cat /etc/mongodb.conf | sed 's/\# replSet = setname/replSet = $locationAbbrev0/' | sudo tee /etc/mongodb.conf -- verify this is working
 
 sudo mkdir -p /datadrive/mongodb
 sudo chown -R mongodb:mongodb /datadrive/mongodb
+
+    RunSSH $port "sudo service mongodb start"
+# 2.6 RunSSH $port "sudo service mongod start"
 
 mongo
 use admin
 db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 # 2.6 db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+
+
+On M1:
+workaround for https://bugs.launchpad.net/ubuntu/+source/walinuxagent/+bug/1308974 :
+	var x = rs.conf()
+	replace hostname with IP in x
+	rs.initiate(x)
+	rs.add(IP address)
 rs.initiate()
-rs.add("wus-20-m1")  -- may have to use IP addresses
-rs.add("wus-21-m2")
+rs.add(M2 host name)
 rs.conf()
 rs.status()
-
 
 exit #>
 }

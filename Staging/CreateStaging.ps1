@@ -8,7 +8,7 @@
     {
         New-AzureVMConfig `
             -Name $stagingServerName `
-            -InstanceSize Small `
+            -InstanceSize Basic_A1 `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$stagingServerName.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `

@@ -28,7 +28,7 @@ function CreateMongoVM($serverName, $port)
 
     New-AzureVMConfig `
         -Name $serverName `
-        -InstanceSize A3 `
+        -InstanceSize Basic_A3 `
         -ImageName $linuxImageName `
         -MediaLocation "$storageAccountContainer$serverName.vhd" `
         -AvailabilitySetName $azureAvailabilitySetName `
@@ -90,17 +90,17 @@ sudo chown -R mongodb:mongodb /datadrive/mongodb
 
 mongo
 use admin
+rs.initiate()
 db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 # 2.6 db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 
 
 On M1:
 workaround for https://bugs.launchpad.net/ubuntu/+source/walinuxagent/+bug/1308974 :
-	var x = rs.conf()
-	replace hostname with IP in x
-	rs.initiate(x)
+	var cfg = rs.conf()
+	cfg.members[0].host = replace hostname with IP
+	rs.initiate(cfg)
 	rs.add(IP address)
-rs.initiate()
 rs.add(M2 host name)
 rs.conf()
 rs.status()

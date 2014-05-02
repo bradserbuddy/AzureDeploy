@@ -10,7 +10,7 @@
     {
         New-AzureVMConfig `
             -Name $dcServerName `
-            -InstanceSize A2 `
+            -InstanceSize Basic_A2 `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$dcServerName.vhd" `
             -DiskLabel "OS" | 

@@ -14,7 +14,7 @@
     {
         New-AzureVMConfig `
             -Name $sql1ServerName `
-            -InstanceSize A3 `
+            -InstanceSize Basic_A3 `
             -ImageName $sqlImageName `
             -MediaLocation "$storageAccountContainer$sql1ServerName.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `
@@ -58,7 +58,7 @@
     {
         New-AzureVMConfig `
             -Name $sql2ServerName `
-            -InstanceSize A3 `
+            -InstanceSize Basic_A3 `
             -ImageName $sqlImageName `
             -MediaLocation "$storageAccountContainer$sql2ServerName.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `

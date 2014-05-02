@@ -8,7 +8,7 @@
     {
         New-AzureVMConfig `
             -Name $webServerName1 `
-            -InstanceSize A2 `
+            -InstanceSize Standard_A2 `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$webServerName1.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `
@@ -38,7 +38,7 @@
     {
         New-AzureVMConfig `
             -Name $webServerName2 `
-            -InstanceSize A2 `
+            -InstanceSize Standard_A2 `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$webServerName2.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `

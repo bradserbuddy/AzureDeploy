@@ -4,6 +4,11 @@
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName1
 
+    $installAspNetScriptBlock =
+    {
+        Install-WindowsFeature -Name Web-Asp-Net45, Web-Asp-Net, AS-NET-Framework, AS-Web-Support
+    }
+
     if ($vm -eq $null)
     {
         New-AzureVMConfig `
@@ -30,6 +35,8 @@
             -LocalPath "$workingDir$webServerName1.rdp"
 
         . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $webServerName1
+
+        RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $webServerName1 $installAspNetScriptBlock
     }
 
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName2
@@ -60,6 +67,8 @@
             -LocalPath "$workingDir$webServerName2.rdp"
 
         . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $webServerName2
+
+        RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $webServerName2 $installAspNetScriptBlock
     }
 
     # mkdir c:\buddyapps 

@@ -15,19 +15,19 @@
 function SetLBWebEndpoints($serverName)
 {
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
-        Add-AzureEndpoint -Name "Http" `
+        Add-AzureEndpoint -Name "HTTP" `
                             -LBSetName "$locationAbbrev-http" `
                             -Protocol tcp `
                             -PublicPort 80 `
-                            -LocalPort 80 `
+                            -LocalPort 8080 `
                             -DefaultProbe |
-        Add-AzureEndpoint -Name "Http Dev Dash" `
+        Add-AzureEndpoint -Name "HTTP Dev Dash" `
                             -LBSetName "$locationAbbrev-http-dd" `
                             -Protocol tcp `
                             -PublicPort 81 `
                             -LocalPort 81 `
                             -DefaultProbe |
-        Add-AzureEndpoint -Name "Https" `
+        Add-AzureEndpoint -Name "HTTPS" `
                             -LBSetName "$locationAbbrev-ssl" `
                             -Protocol tcp `
                             -PublicPort 443 `

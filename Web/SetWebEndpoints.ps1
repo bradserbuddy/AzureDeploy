@@ -36,6 +36,23 @@ function SetLBWebEndpoints($serverName)
             Update-AzureVM
 }
 
+function EnableHttpFirewall($serverName, $ports)
+{
+    $enableHttpScriptBlock =
+    {
+        $portPrefix ="HTTP"
+
+        $localPorts = $Using:ports
+
+        # New-NetFirewallRule\Set-NetFirewallRule doesn't accept individual ports
+        for ($i = 0; $i -lt $localPorts.Count; $i++)
+        {
+            New-NetFirewallRule -Name "$portPrefix$i" -DisplayName "$portPrefix$i" -LocalPort $localPorts[$i] -Protocol TCP
+        }
+    }
+    
+    RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $serverName $enableHttpScriptBlock
+}
 
 SetWebEndpoints $webServerName1 "Test API" 9080 "Test Dev Dash" 9081
 SetWebEndpoints $webServerName2 "Test API" 9180 "Test Dev Dash" 9181 
@@ -45,3 +62,6 @@ SetWebEndpoints $webServerName2 "Direct API" 10180 "Direct Dev Dash" 10181
 
 SetLBWebEndpoints $webServerName1
 SetLBWebEndpoints $webServerName2
+
+EnableHttpFirewall $webServerName1 9080,9081,10080,10081,81
+EnableHttpFirewall $webServerName2 9180,9181,10180,10181,81

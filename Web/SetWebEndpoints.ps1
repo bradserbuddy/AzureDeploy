@@ -63,5 +63,5 @@ SetWebEndpoints $webServerName2 "Direct API" 10180 "Direct Dev Dash" 10181
 SetLBWebEndpoints $webServerName1
 SetLBWebEndpoints $webServerName2
 
-EnableHttpFirewall $webServerName1 9080,9081,10080,10081,81
-EnableHttpFirewall $webServerName2 9180,9181,10180,10181,81
+EnableHttpFirewall $webServerName1 8080,9080,9081,10080,10081,81
+EnableHttpFirewall $webServerName2 8080,9180,9181,10180,10181,81

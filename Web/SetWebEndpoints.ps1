@@ -1,14 +1,14 @@
-﻿function SetWebEndpoints($serverName, $apiName, $apiPort, $devDashName, $devDashPort)
+﻿function SetWebEndpoints($serverName, $apiName, $apiPorts, $devDashName, $devDashPorts)
 {
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
         Add-AzureEndpoint -Name $apiName `
                             -Protocol tcp `
-                            -PublicPort $apiPort `
-                            -LocalPort $apiPort |
+                            -PublicPort $apiPorts[0] `
+                            -LocalPort $apiPort[1] |
         Add-AzureEndpoint -Name $devDashName `
                             -Protocol tcp `
-                            -PublicPort $devDashPort `
-                            -LocalPort $devDashPort |
+                            -PublicPort $devDashPort[0] `
+                            -LocalPort $devDashPort[1] |
             Update-AzureVM
 }
 
@@ -54,14 +54,14 @@ function EnableHttpFirewall($serverName, $ports)
     RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $serverName $enableHttpScriptBlock
 }
 
-SetWebEndpoints $webServerName1 "Test API" 9080 "Test Dev Dash" 9081
-SetWebEndpoints $webServerName2 "Test API" 9180 "Test Dev Dash" 9181 
+SetWebEndpoints $webServerName1 "Test API" 9080,9080 "Test Dev Dash" 9081,9081
+SetWebEndpoints $webServerName2 "Test API" 9180,9080 "Test Dev Dash" 9181,9081
 
-SetWebEndpoints $webServerName1 "Direct API" 10080 "Direct Dev Dash" 10081 
-SetWebEndpoints $webServerName2 "Direct API" 10180 "Direct Dev Dash" 10181
+SetWebEndpoints $webServerName1 "Direct API" 10080,10080 "Direct Dev Dash" 10081,10081 
+SetWebEndpoints $webServerName2 "Direct API" 10180,10080 "Direct Dev Dash" 10181,10081
 
 SetLBWebEndpoints $webServerName1
 SetLBWebEndpoints $webServerName2
 
 EnableHttpFirewall $webServerName1 8080,9080,9081,10080,10081,81
-EnableHttpFirewall $webServerName2 8080,9180,9181,10180,10181,81
+EnableHttpFirewall $webServerName2 8080,9080,9081,10080,10081,81

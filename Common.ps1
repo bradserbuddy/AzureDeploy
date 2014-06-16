@@ -15,4 +15,8 @@ function Common()
 
     . $workingDir"Common\Storage.ps1" #depends on Auth
     Storage
+
+    # Image names are location-specific, so they have to be determined after Auth
+    $global:winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*" -and $_.ImageFamily -like "*(en-us)"} | sort PublishedDate -Descending)[0].ImageName
+    $global:linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS" -and $_.ImageName -like "*en-us*"} | sort PublishedDate -Descending)[0].ImageName
 }

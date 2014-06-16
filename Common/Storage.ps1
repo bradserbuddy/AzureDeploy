@@ -8,7 +8,6 @@
     }
     catch {}
 
-
     if ($storageAccount -eq $null)
     {
         New-AzureStorageAccount `

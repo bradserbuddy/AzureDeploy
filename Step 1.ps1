@@ -1,4 +1,4 @@
-﻿Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
+﻿Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\ServiceManagement\Azure\Azure.psd1"
 
 $ErrorActionPreference = "Stop"
 $DebugPreference = "SilentlyContinue"
@@ -9,6 +9,8 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 . Common
 
 . $workingDir"Common\RunRemotely.ps1"
+. $workingDir"Common\CreateVm.ps1"
+. $workingDir"Common\RdpManageCert.ps1"
 
 
 Write-Status "Adding Virtual Network..."
@@ -16,14 +18,18 @@ Write-Status "Adding Virtual Network..."
 Add-VirtualNetworkSite $virtualNetworkName $affinityGroupName "10.10.0.0/16" "10.10.1.0/24" "10.10.2.0/24"
 
 
-Write-Status "Creating Dc..."
+# CreateDc creates the DC web service, so has to be first
+Write-Status "Creating Dc (Queue 1)..."
 . $workingDir"Dc\CreateDc.ps1"
 CreateDc
-
 
 Write-Status "Configuring Dc..."
 . $workingDir"Dc\ConfigureDc.ps1"
 ConfigureDc
+
+
+Write-Status "Configuring Queue 2..."
+CreateQueue2
 
 
 Write-Status "Creating Web..."
@@ -33,6 +39,11 @@ CreateWeb
 
 Write-Status "Setting Web Endpoints..."
 . $workingDir"Web\SetWebEndpoints.ps1"
+
+
+Write-Status "Create Memcached..."
+. $workingDir"Memcached\CreateMemcached.ps1"
+CreateMemcached
 
 
 Write-Status "Create Mongo..."
@@ -49,6 +60,7 @@ Write-Status "Create Staging..."
 CreateStaging
 
 
+# Creates the SQL cloud service, so has to come before CreateSql
 Write-Status "Creating Quorum..."
 . $workingDir"Quorum\CreateQuorum.ps1"
 CreateQuorum

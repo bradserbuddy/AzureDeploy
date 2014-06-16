@@ -1,58 +1,38 @@
 ﻿function CreateMongo()
 {
-    $linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS"} | sort PublishedDate -Descending)[0].ImageName
 
     # SSH key\certificate info here:  http://azure.microsoft.com/en-us/documentation/articles/linux-use-ssh-key/
-    Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshLocalCertificatePath
+    #Add-AzureCertificate -ServiceName $dcCloudServiceName -CertToDeploy $sshLocalCertificatePath
 
-    $sshPublicKey = New-AzureSSHKey -PublicKey –Fingerprint $sshCertificateFingerprint –Path $sshRemotePublicKeyPath
+    #$sshPublicKey = New-AzureSSHKey -PublicKey –Fingerprint $sshCertificateFingerprint –Path $sshRemotePublicKeyPath
 
-    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName1
+    CreateMongoVm $mongoServerName1 20322
 
-    if ($vm -eq $null)
-    {
-        CreateMongoVM $mongoServerName1 20322
-    }
+    CreateMongoVm $mongoServerName2 20422
 
-    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $mongoServerName2
-
-    if ($vm -eq $null)
-    {
-        CreateMongoVM $mongoServerName2 20422
-    }
+    CreateLinuxVmChecked $dcCloudServiceName $mongoServerName3 $Basic_A1
 }
 
-function CreateMongoVM($serverName, $port)
+function CreateMongoVm($serverName, $publicPort)
 {
     #TODO: -SSHPublicKeys isn't adding the public key to authorized_keys, try ~.ssh/authorized_keys for $sshRemotePublicKeyPath?
 
-    New-AzureVMConfig `
-        -Name $serverName `
-        -InstanceSize Basic_A3 `
-        -ImageName $linuxImageName `
-        -MediaLocation "$storageAccountContainer$serverName.vhd" `
-        -AvailabilitySetName $azureAvailabilitySetName `
-        -DiskLabel "OS" | 
-        Add-AzureProvisioningConfig `
-            -Linux `
-            -LinuxUser $vmAdminUser `
-            -Password $vmAdminPassword `
-            -NoSSHEndpoint `
-            -SSHPublicKeys $sshPublicKey |
-            Set-AzureSubnet `
-                -SubnetNames $frontSubnetName |
-				New-AzureVM `
-					-ServiceName $dcCloudServiceName `
-                    -WaitForBoot
+    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName
 
-    # Can't chain because of -WaitForBoot
-    Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
-        Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Mongo" -LUN 0 |
-            Update-AzureVM
+    if ($vm -eq $null)
+    {
+        CreateLinuxVm $dcCloudServiceName $serverName $Basic_A3
+
+        # Can't chain because of -WaitForBoot
+        Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |
+            Add-AzureDataDisk -CreateNew -DiskSizeInGB 200 -DiskLabel "Datadrive" -LUN 0 |
+            Add-AzureDataDisk -CreateNew -DiskSizeInGB 10 -DiskLabel "Journal" -LUN 1 |
+                Update-AzureVM
+    }
     
 <#  
-    InitializeSSH $port
-    UploadSSHPublicKey $port
+    InitializeSSH $publicPort
+    UploadSSHPublicKey $publicPort
     RunSSH $port "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10"
     RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
     RunSSH $port "sudo apt-get -y update"

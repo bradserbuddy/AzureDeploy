@@ -1,14 +1,12 @@
 ﻿function CreateQuorum()
 {
-    $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
-
     $vm = Get-AzureVM -ServiceName $sqlCloudServiceName -Name $quorumServerName
 
     if ($vm.InstanceStatus -ne "ReadyRole")
     {
         New-AzureVMConfig `
             -Name $quorumServerName `
-            -InstanceSize Basic_A1 `
+            -InstanceSize $Basic_A1 `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$quorumServerName.vhd" `
             -AvailabilitySetName $azureAvailabilitySetName `
@@ -31,11 +29,6 @@
                         -DnsSettings $dnsSettings `
                         -WaitForBoot
 
-        Get-AzureRemoteDesktopFile `
-            -ServiceName $sqlCloudServiceName `
-            -Name $quorumServerName `
-            -LocalPath "$workingDir$quorumServerName.rdp"
-
-        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $sqlCloudServiceName -Name $quorumServerName
+        RdpManageCert $sqlCloudServiceName $quorumServerName
     }
 }

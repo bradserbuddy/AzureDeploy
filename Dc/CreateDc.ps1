@@ -2,34 +2,36 @@
 {
     # TODO: Add-AzureDataDisk adds the data disk that you will use for storing Active Directory data, with caching option set to None. - not sure how important this is
 
-    $winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*"} | sort PublishedDate -Descending)[0].ImageName
-
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $dcServerName
 
     if ($vm -eq $null)
     {
-        New-AzureVMConfig `
-            -Name $dcServerName `
-            -InstanceSize Basic_A2 `
-            -ImageName $winImageName `
-            -MediaLocation "$storageAccountContainer$dcServerName.vhd" `
-            -DiskLabel "OS" | 
-            Add-AzureProvisioningConfig `
-                -Windows `
-                -DisableAutomaticUpdates `
-                -AdminUserName $vmAdminUser `
-                -Password $vmAdminPassword |
-                New-AzureVM `
-                    -ServiceName $dcCloudServiceName `
-                    –AffinityGroup $affinityGroupName `
-                    -VNetName $virtualNetworkName `
+        $vm = GetWinVmConfig $dcCloudServiceName $dcServerName $Basic_A2
+     
+        $vm | New-AzureVM `
+                -ServiceName $dcCloudServiceName `
+                –AffinityGroup $affinityGroupName `
+                -VNetName $virtualNetworkName `
+                -WaitForBoot
+
+        RdpManageCert $dcCloudServiceName $dcServerName
+    }
+}
+
+function CreateQueue2()
+{
+    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $queueServerName2
+
+    if ($vm -eq $null)
+    {
+        $vm = GetWinVmConfig $dcCloudServiceName $queueServerName2 $Basic_A2
+
+        $vm | Set-AzureSubnet `
+                -SubnetNames $frontSubnetName |
+			    New-AzureVM `
+				    -ServiceName $dcCloudServiceName `
                     -WaitForBoot
 
-        Get-AzureRemoteDesktopFile `
-            -ServiceName $dcCloudServiceName `
-            -Name $dcServerName `
-            -LocalPath "$workingDir$dcServerName.rdp" 
-
-        . $workingDir"External\InstallWinRMCertAzureVM.ps1" -SubscriptionName $subscriptionName -ServiceName $dcCloudServiceName -Name $dcServerName
+        RdpManageCert $dcCloudServiceName $queueServerName2
     }
 }

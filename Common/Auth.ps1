@@ -3,12 +3,13 @@
     # Ensure that we are not already logged in to Azure
     Get-AzureAccount | ForEach-Object { Remove-AzureAccount $_.Name -Force }
 
-    $allSubscriptions = Get-AzureSubscription
+    $subscription = Get-AzureSubscription | where {$_.SubscriptionName -like $subscriptionName}
 
-    if ($allSubscriptions -eq $null)
+    if ($subscription -eq $null)
     {
-        # call Get-AzurePublishSettingsFile to get an updated .publishsettings if needed
-        $publishSettings = $workingDir + "Windows Azure MSDN - Visual Studio Ultimate-Windows Azure for BizSpark Plus-4-11-2014-credentials.publishsettings"
+        # Get-AzureEnvironment will give you the URL to get the .publishsettings file
+        # or call Get-AzurePublishSettingsFile (US only) to get an updated .publishsettings if needed
+        $publishSettings = "$workingDir$publishSettingsName.publishsettings"
 
         Import-AzurePublishSettingsFile -PublishSettingsFile $publishSettings
     }

@@ -1,7 +1,7 @@
 ﻿function AddDbToSqlAvailabilityGroup($databaseName)
 {
-    $backupShare = "\\$sql1ServerName\backup"
-    $quorumShare = "\\$sql1ServerName\quorum"
+    $backupShare = "\\$sqlServerName1\backup"
+    $quorumShare = "\\$sqlServerName1\quorum"
 
 
     Set-ExecutionPolicy RemoteSigned -Force
@@ -15,16 +15,16 @@
     $database.Alter();
 
 
-    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sql1ServerName
-    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sql1ServerName -BackupAction Log
-    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sql2ServerName -NoRecovery
-    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sql2ServerName -RestoreAction Log -NoRecovery 
+    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sqlServerName1
+    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sqlServerName1 -BackupAction Log
+    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sqlServerName2 -NoRecovery
+    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sqlServerName2 -RestoreAction Log -NoRecovery 
 
 
     Add-SqlAvailabilityDatabase `
-        -Path "SQLSERVER:\SQL\$sql1ServerName\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
+        -Path "SQLSERVER:\SQL\$sqlServerName1\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
         -Database $databaseName
     Add-SqlAvailabilityDatabase `
-        -Path "SQLSERVER:\SQL\$sql2ServerName\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
+        -Path "SQLSERVER:\SQL\$sqlServerName2\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
         -Database $databaseName
 }

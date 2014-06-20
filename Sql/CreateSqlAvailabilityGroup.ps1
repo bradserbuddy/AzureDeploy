@@ -1,7 +1,7 @@
 ﻿function CreateSqlAvailabilityGroup($databaseName)
 {
-    $backupShare = "\\$sql1ServerName\backup"
-    $quorumShare = "\\$sql1ServerName\quorum"
+    $backupShare = "\\$sqlServerName1\backup"
+    $quorumShare = "\\$sqlServerName1\quorum"
 
 
     Set-ExecutionPolicy RemoteSigned -Force
@@ -32,24 +32,24 @@
     $database.Alter();
 
 
-    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sql1ServerName
-    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sql1ServerName -BackupAction Log
-    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sql2ServerName -NoRecovery
-    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sql2ServerName -RestoreAction Log -NoRecovery 
+    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sqlServerName1
+    Backup-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sqlServerName1 -BackupAction Log
+    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.bak" -ServerInstance $sqlServerName2 -NoRecovery
+    Restore-SqlDatabase -Database $databaseName -BackupFile "$backupShare\$databaseName.log" -ServerInstance $sqlServerName2 -RestoreAction Log -NoRecovery 
 
 
     $primaryReplica = 
         New-SqlAvailabilityReplica `
-        -Name $sql1ServerName `
-        -EndpointUrl "TCP://$sql1ServerName.$($FQDN):5022" `
+        -Name $sqlServerName1 `
+        -EndpointUrl "TCP://$sqlServerName1.$($FQDN):5022" `
         -AvailabilityMode "SynchronousCommit" `
         -FailoverMode "Automatic" `
         -Version 11 `
         -AsTemplate
     $secondaryReplica = 
         New-SqlAvailabilityReplica `
-        -Name $sql2ServerName `
-        -EndpointUrl "TCP://$sql2ServerName.$($FQDN):5022" `
+        -Name $sqlServerName2 `
+        -EndpointUrl "TCP://$sqlServerName2.$($FQDN):5022" `
         -AvailabilityMode "SynchronousCommit" `
         -FailoverMode "Automatic" `
         -Version 11 `
@@ -58,15 +58,15 @@
 
     New-SqlAvailabilityGroup `
         -Name $sqlAvailabilityGroupName `
-        -Path "SQLSERVER:\SQL\$sql1ServerName\Default" `
+        -Path "SQLSERVER:\SQL\$sqlServerName1\Default" `
         -AvailabilityReplica @($primaryReplica,$secondaryReplica) `
         -Database $databaseName
     Join-SqlAvailabilityGroup `
-        -Path "SQLSERVER:\SQL\$sql2ServerName\Default" `
+        -Path "SQLSERVER:\SQL\$sqlServerName2\Default" `
         -Name $sqlAvailabilityGroupName
 
 
     Add-SqlAvailabilityDatabase `
-        -Path "SQLSERVER:\SQL\$sql2ServerName\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
+        -Path "SQLSERVER:\SQL\$sqlServerName2\Default\AvailabilityGroups\$sqlAvailabilityGroupName" `
         -Database $databaseName
 }

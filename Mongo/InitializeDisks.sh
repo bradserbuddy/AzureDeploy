@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# be careful about drive order - Azure may have created the drives in a different order, size-wise
+
 sudo fdisk /dev/sdc < fdiskCommands.txt
 sudo mkfs -t ext4 /dev/sdc1
 sudo mkdir /datadrive

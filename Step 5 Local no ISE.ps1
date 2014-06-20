@@ -10,7 +10,7 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
 
 # Not in ISE!
-& $workingDir"External\ConfigureAGListenerCloudOnly.ps1" -AGName $sqlAvailabilityGroupName -EndpointName $endpointName -ListenerName $sqlListenerName -ServiceName $sqlCloudServiceName -WSFCNodes $sql1ServerName,$sql2ServerName,$quorumServerName -DomainAccount "$domainNameAsPrefix$installUserName" -Password $dcUsersPassword
+& $workingDir"External\ConfigureAGListenerCloudOnly.ps1" -AGName $sqlAvailabilityGroupName -EndpointName $endpointName -ListenerName $sqlListenerName -ServiceName $sqlCloudServiceName -WSFCNodes $sqlServerName1,$sqlServerName2,$quorumServerName -DomainAccount "$domainNameAsPrefix$installUserName" -Password $dcUsersPassword
 
 
 Write-Status "Set Endpoint Security..."

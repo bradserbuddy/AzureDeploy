@@ -11,15 +11,15 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
 Write-Status "Install Availability Group Prep..."
 . $workingDir"Sql\InstallAvailabilityGroupPrep.ps1"
-InstallAvailabilityGroupPrep $sql1ServerName $sqlUserName1 $vmAdminPassword
-InstallAvailabilityGroupPrep $sql2ServerName $sqlUserName2 $vmAdminPassword
+InstallAvailabilityGroupPrep $sqlServerName1 $sqlUserName1 $vmAdminPassword
+InstallAvailabilityGroupPrep $sqlServerName2 $sqlUserName2 $vmAdminPassword
 
 
 Add-WindowsFeature 'Failover-Clustering', 'RSAT-Clustering-PowerShell', 'RSAT-Clustering-CmdInterface'
 
 
 Set-ExecutionPolicy Unrestricted -Force
-& $workingDir"External\CreateAzureFailoverCluster.ps1" -ClusterName $sqlClusterName -ClusterNodes $sql1ServerName, $sql2ServerName, $quorumServerName -Force
+& $workingDir"External\CreateAzureFailoverCluster.ps1" -ClusterName $sqlClusterName -ClusterNodes $sqlServerName1, $sqlServerName2, $quorumServerName -Force
 
 
 Write-Status "Install Availability Group..."

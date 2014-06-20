@@ -25,3 +25,6 @@ Set-ExecutionPolicy Unrestricted -Force
 Write-Status "Install Availability Group..."
 . $workingDir"Sql\InstallAvailabilityGroup.ps1"
 InstallAvailabilityGroup
+
+
+Write-Status "Done!  Be sure to log out before continuing with Step 4."

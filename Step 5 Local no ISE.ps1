@@ -1,4 +1,4 @@
-﻿Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\Azure\Azure.psd1"
+﻿Import-Module "C:\Program Files (x86)\Microsoft SDKs\Windows Azure\PowerShell\ServiceManagement\Azure\Azure.psd1"
 
 $ErrorActionPreference = "Stop"
 $DebugPreference = "SilentlyContinue"

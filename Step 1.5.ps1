@@ -12,9 +12,11 @@ $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
 
 Write-Status "Installing Sql Failover Clustering..."
+
 $session = GetSession $vmAdminUser $vmAdminPassword $sqlCloudServiceName $sqlServerName1
 Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallSqlFailoverClustering.ps1" -ArgumentList $domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlServerAdminUserName, $sqlServerAdminPassword
 Remove-PSSession -Session $session
+
 $session = GetSession $vmAdminUser $vmAdminPassword $sqlCloudServiceName $sqlServerName2
 Invoke-Command -Session $session -FilePath $workingDir"Sql\InstallSqlFailoverClustering.ps1" -ArgumentList $domainNameAsPrefix, $installUserName, $vmAdminUser, $sqlServerAdminUserName, $sqlServerAdminPassword
 Remove-PSSession -Session $session

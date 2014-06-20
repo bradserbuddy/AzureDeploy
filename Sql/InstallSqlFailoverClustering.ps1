@@ -7,7 +7,7 @@ function InstallSqlFailoverClustering()
 
     $fullInstallUserName = "$domainNameAsPrefix$installUserName"
 
-    net localgroup administrators $fullInstallUserName /Add
+    net localgroup administrators $fullInstallUserName /Add  # System error 1378 has occurred. - check to see if the user has already added
 
     Set-ExecutionPolicy -Execution RemoteSigned -Force
     Import-Module -Name "sqlps" -DisableNameChecking

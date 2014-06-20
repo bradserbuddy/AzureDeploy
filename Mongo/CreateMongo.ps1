@@ -75,16 +75,6 @@ db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabas
 # 2.6 db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
 
 
-On M1:
-workaround for https://bugs.launchpad.net/ubuntu/+source/walinuxagent/+bug/1308974 :
-	var cfg = rs.conf()
-	cfg.members[0].host = replace hostname with IP
-	rs.initiate(cfg)
-	rs.add(IP address)
-rs.add(M2 host name)
-rs.conf()
-rs.status()
-
 exit #>
 }
 

@@ -1,12 +1,25 @@
 ﻿function Settings()
 {
-    #$location = "West Europe"
-	#$locationAbbrev = "EU-W"
+    # The below settings change depending on the region
+
     $location = "China East"
 	$locationAbbrev = "CN-E"
     $subscriptionName = "Enterprise Trial"
     $publishSettingsName = "Enterprise Trial-6-13-2014-credentials"
     $azureUrlPath = "chinacloudapi.cn"
+
+    # The above settings change depending on the region
+
+    
+    # The below settings may change depending on the region
+
+    $Basic_A1 = "Small"
+    $Standard_A2 = "Medium"
+    $Basic_A2 = "Medium"
+    $Basic_A3 = "Large"
+
+    # The above settings may change depending on the region
+
 
     $delimiter = "-"
 	$clusterName = "B"
@@ -83,9 +96,4 @@
     $sshRemotePublicKeyPath = "/home/sysadmin/.ssh/authorized_keys"
     $sshLocalPublicKeyPath = "C:\src\bran-the-builder\deploy_key.rsa.pub"
     $sshLocalPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
-
-    $Basic_A1 = "Small"
-    $Standard_A2 = "Medium"
-    $Basic_A2 = "Medium"
-    $Basic_A3 = "Large"
 }

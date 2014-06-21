@@ -36,11 +36,6 @@ function CreateSqlVm($sqlServerName, $publicPort)
                 -DomainPassword $vmAdminPassword |
                 Set-AzureSubnet `
                     -SubnetNames $backSubnetName |
-                    Add-AzureEndpoint `
-                        -Name "SQL" `
-                        -Protocol TCP `
-                        -PublicPort $publicPort `
-                        -LocalPort 1433 | 
                          New-AzureVM -ServiceName $sqlCloudServiceName -WaitForBoot
 
         Get-AzureVM -ServiceName $sqlCloudServiceName -Name $sqlServerName |

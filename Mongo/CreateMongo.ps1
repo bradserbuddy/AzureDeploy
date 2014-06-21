@@ -37,43 +37,34 @@ function CreateMongoVm($serverName, $publicPort)
     RunSSH $port "echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list"
     RunSSH $port "sudo apt-get -y update"
 
-    RunSSH $port "sudo apt-get -y install mongodb-10gen=2.4.10"
-    RunSSH $port "echo "mongodb-10gen hold" | sudo dpkg --set-selections"
-# 2.6 RunSSH $port "apt-get install mongodb-org=2.6.0 mongodb-org-server=2.6.0 mongodb-org-shell=2.6.0 mongodb-org-mongos=2.6.0 mongodb-org-tools=2.6.0"
-# 2.6 RunSSH $port "echo "mongodb-org hold" | sudo dpkg --set-selections"
-# 2.6 RunSSH $port "echo "mongodb-org-server hold" | sudo dpkg --set-selections"
-# 2.6 RunSSH $port "echo "mongodb-org-shell hold" | sudo dpkg --set-selections"
-# 2.6 RunSSH $port "echo "mongodb-org-mongos hold" | sudo dpkg --set-selections"
-# 2.6 RunSSH $port "echo "mongodb-org-tools hold" | sudo dpkg --set-selections"
+    RunSSH $port "apt-get install mongodb-org=2.6.0 mongodb-org-server=2.6.3 mongodb-org-shell=2.6.3 mongodb-org-mongos=2.6.3 mongodb-org-tools=2.6.3"
+    RunSSH $port "echo "mongodb-org hold" | sudo dpkg --set-selections"
+    RunSSH $port "echo "mongodb-org-server hold" | sudo dpkg --set-selections"
+    RunSSH $port "echo "mongodb-org-shell hold" | sudo dpkg --set-selections"
+    RunSSH $port "echo "mongodb-org-mongos hold" | sudo dpkg --set-selections"
+    RunSSH $port "echo "mongodb-org-tools hold" | sudo dpkg --set-selections"
 
-    RunSSH $port "sudo service mongodb stop"
-# 2.6 RunSSH $port "sudo service mongod stop"
+    RunSSH $port "sudo service mongod start\stop"
 
-sudo fdisk /dev/sdc < fdiskCommands.txt
-sudo mkfs -t ext4 /dev/sdc1
-sudo mkdir /datadrive
-sudo mount /dev/sdc1 /datadrive
-sudo -i blkid | grep sdc1 | sed -r 's/.*(UUID=\"[0-9a-f-]{36}\").*/\1/' | sed 's/$/ \/datadrive ext4 defaults 0 2/' | sudo tee -a /etc/fstab
-sudo umount /datadrive
-sudo mount /datadrive
 
-#sudo cat /etc/mongodb.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongodb.conf -- verify this is working
-# 2.6 sudo cat /etc/mongod.conf | sed 's/dbpath=\/var\/lib\/mongodb/dbpath=\/datadrive\/mongodb/' | sudo tee /etc/mongod.conf
-# replace $locationAbbrev
-#sudo cat /etc/mongodb.conf | sed 's/\# replSet = setname/replSet = $locationAbbrev0/' | sudo tee /etc/mongodb.conf -- verify this is working
+In Mongo config (2.6):
+comment out bind_ip
+replSet = XX0 # the two-letter country code, followed by zero
+add syncdelay = 20
 
-sudo mkdir -p /datadrive/mongodb
-sudo chown -R mongodb:mongodb /datadrive/mongodb
+In Mongo arbiter config (2.6):
+comment out bind_ip
+nojournal = true
+noprealloc = true
+smallfiles = true
 
-    RunSSH $port "sudo service mongodb start"
-# 2.6 RunSSH $port "sudo service mongod start"
 
 mongo
 use admin
-rs.initiate()
-db.addUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
-# 2.6 db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
-
+rs.initiate()  # "local.oplog.rs is not empty on the initiating member.  cannot initiate." - this is a spurious error and can be ignored
+db.createUser({ user: "buddy", pwd: "&Tdmp4B.comINTC", roles: ["userAdminAnyDatabase"]})
+rs.add(<IP address:port of secondary>)
+rs.addArb(<IP address:port of arbiter>)
 
 exit #>
 }

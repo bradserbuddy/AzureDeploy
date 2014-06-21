@@ -21,7 +21,7 @@ $dcCloudServiceIpAddressSubnet = "$dcCloudServiceIpAddress/32"
 
 $acl = New-AzureAclConfig
 
-Set-AzureAclConfig –AddRule –ACL $acl –Order 100 –Action Permit –RemoteSubnet $dcCloudServiceIpAddressSubnet –Description "$dcCloudServiceName.cloudapp.net subnet"
+Set-AzureAclConfig –AddRule –ACL $acl –Order 100 –Action Permit –RemoteSubnet $dcCloudServiceIpAddressSubnet –Description "$dcCloudServiceName.$azureCloudServiceUrlPath subnet"
 
 Set-AzureLoadBalancedEndpoint –ServiceName $sqlCloudServiceName –LBSetName $lbSetName -Protocol tcp -ProbeProtocolTCP -ACL $acl
 

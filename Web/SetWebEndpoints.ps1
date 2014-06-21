@@ -47,7 +47,9 @@ function EnableHttpFirewall($serverName, $ports)
         # New-NetFirewallRule\Set-NetFirewallRule doesn't accept individual ports
         for ($i = 0; $i -lt $localPorts.Count; $i++)
         {
-            New-NetFirewallRule -Name "$portPrefix$i" -DisplayName "$portPrefix$i" -LocalPort $localPorts[$i] -Protocol TCP
+            $localPort = $localPorts[$i]
+
+            New-NetFirewallRule -Name "$portPrefix $localPort" -DisplayName "$portPrefix $localPort" -LocalPort $localPort -Protocol TCP
         }
     }
     

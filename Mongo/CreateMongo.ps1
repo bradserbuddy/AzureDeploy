@@ -84,20 +84,20 @@ function InitializeSSH($port)
     # ssh.exe throws a warning when accepting the fingerprint
     try
     {
-        & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshLocalPrivateKeyPath --% -o StrictHostKeyChecking=no '"cd"'
+        & $sshExePath "$vmAdminUser@$dcCloudServiceName.$azureCloudServiceUrlPath" -p $port -i $sshLocalPrivateKeyPath --% -o StrictHostKeyChecking=no '"cd"'
     } catch {}
 }
 
  
 function UploadSSHPublicKey($port)
 {
-    $nameAndHost = "$vmAdminUser@$dcCloudServiceName.cloudapp.net"
+    $nameAndHost = "$vmAdminUser@$dcCloudServiceName.$azureCloudServiceUrlPath"
 
-    & "C:\Program Files\TortoiseGit\bin\TortoiseGitPlink.exe" -ssh -P $port "sysadmin@b-v2-eus-dc.cloudapp.net" -pw "$($vmAdminPassword)" "scp "$($nameAndHost)" "$($nameAndHost):~.ssh/authorized_keys""
+    & "C:\Program Files\TortoiseGit\bin\TortoiseGitPlink.exe" -ssh -P $port "sysadmin@b-v2-eus-dc.$($azureCloudServiceUrlPath)" -pw "$($vmAdminPassword)" "scp "$($nameAndHost)" "$($nameAndHost):~.ssh/authorized_keys""
 }
 
 
 function RunSSH($port, $command)
 {
-    & $sshExePath "$vmAdminUser@$dcCloudServiceName.cloudapp.net" -p $port -i $sshLocalPrivateKeyPath "$command" 2>&1 > "C:\logfile.log" 
+    & $sshExePath "$vmAdminUser@$dcCloudServiceName.$azureCloudServiceUrlPath" -p $port -i $sshLocalPrivateKeyPath "$command" 2>&1 > "C:\logfile.log" 
 }

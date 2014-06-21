@@ -123,7 +123,10 @@ If((Get-AzureService -ServiceName $ServiceName) -eq $null)
     Write-Error "Cloud service $ServiceName is not found - ABORT"
     Exit 1
 }
-$serviceip = ([System.Net.DNS]::GetHostAddresses("$ServiceName.cloudapp.net")).IPAddressToString
+
+Write-Host "Service Name:" "$ServiceName.$azureCloudServiceUrlPath"
+
+$serviceip = ([System.Net.DNS]::GetHostAddresses("$ServiceName.$azureCloudServiceUrlPath")).IPAddressToString
 
 # Validate if VMs specified in $WSFCNodes is in the cloud service 
 If((Compare-Object (Get-AzureVM -ServiceName $ServiceName).Name $WSFCNodes | where {$_.SideIndicator -eq "=>"}) -ne $null)

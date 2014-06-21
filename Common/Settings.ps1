@@ -6,7 +6,8 @@
 	$locationAbbrev = "CN-E"
     $subscriptionName = "Enterprise Trial"
     $publishSettingsName = "Enterprise Trial-6-13-2014-credentials"
-    $azureUrlPath = "chinacloudapi.cn"
+    $azureStorageUrlPath = "chinacloudapi.cn" # Non-China: windows.net
+    $azureCloudServiceUrlPath = "chinacloudapp.cn"  # Non-China: cloudapp.net
 
     # The above settings change depending on the region
 
@@ -36,7 +37,7 @@
 
     $storageAccountName = $clusterLocation.Replace($delimiter, "").ToLowerInvariant() # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
     $storageAccountLabel = "$capitalizedClusterName $location Storage Account"
-    $storageAccountContainer = "https://$storageAccountName.blob.core.$azureUrlPath/vhds/"
+    $storageAccountContainer = "https://$storageAccountName.blob.core.$azureStorageUrlPath/vhds/"
 
     $azureAvailabilitySetName = "$clusterLocation Availability Set"
     $dcCloudServiceName = "$clusterLocation" 

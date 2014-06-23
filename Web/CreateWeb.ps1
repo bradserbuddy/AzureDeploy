@@ -4,8 +4,13 @@
 
     CreateWebVm $webServerName2
 
-    # mkdir c:\buddyapps 
-    # NET SHARE buddyapps=c:\buddyapps /GRANT:Everyone,FULL
+    # deployment master\slave drive
+    Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName1 |
+        Add-AzureDataDisk -CreateNew -DiskSizeInGB 30 -DiskLabel "Deployment" -LUN 0 |
+            Update-AzureVM
+
+    # mkdir z:\buddyapps 
+    # NET SHARE buddyapps=z:\ /GRANT:Everyone,FULL
 }
 
 function CreateWebVm($serverName)

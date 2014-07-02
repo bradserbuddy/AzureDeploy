@@ -10,3 +10,5 @@ echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
 echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 
 sudo service mongod stop
+
+sudo apt-get install ntp

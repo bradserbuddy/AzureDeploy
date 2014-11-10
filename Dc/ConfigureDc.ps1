@@ -1,5 +1,8 @@
 ﻿function ConfigureDc()
 {
+    Write-Status "Log on to $dcServerName, then hit Enter."
+    Read-Host
+
     $scriptBlock =
     {
         Install-WindowsFeature -name AD-Domain-Services –IncludeManagementTools
@@ -15,15 +18,13 @@
                             -ForestMode Win2012 `
                             -LogPath "C:\Windows\NTDS" `
                             -SYSVOLPath "C:\Windows\SYSVOL" `
-                            -NoRebootOnCompletion `
                             -Force
     }
 
+    Write-Status "Verify $dcServerName reboots successfully after AD installation, then hit Enter."
+
     RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $dcServerName $scriptBlock
 
-    Restart-AzureVM -ServiceName $dcCloudServiceName -Name $dcServerName
-
-    Write-Status "Wait for $dcServerName restart.  Hit Enter."
     Read-Host
 
     . $workingDir"Dc\AddDcUsers.ps1"

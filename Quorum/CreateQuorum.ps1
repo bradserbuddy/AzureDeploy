@@ -9,7 +9,7 @@
             -InstanceSize $Basic_A1 `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$quorumServerName.vhd" `
-            -AvailabilitySetName $azureAvailabilitySetName `
+            -AvailabilitySetName $sqlAvailabilitySetName `
             -DiskLabel "OS" | 
             Add-AzureProvisioningConfig `
                 -WindowsDomain `

@@ -6,7 +6,7 @@
 
     if ($vm -eq $null)
     {
-        $vm = GetWinVmConfig $dcCloudServiceName $dcServerName $Basic_A2
+        $vm = GetWinVmConfig $dcCloudServiceName $dcServerName $Basic_A2 $servicesAvailabilitySetName
      
         $vm | New-AzureVM `
                 -ServiceName $dcCloudServiceName `
@@ -18,13 +18,13 @@
     }
 }
 
-function CreateQueue2()
+function CreateServices2()
 {
-    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $queueServerName2
+    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $servicesServerName2
 
     if ($vm -eq $null)
     {
-        $vm = GetWinVmConfig $dcCloudServiceName $queueServerName2 $Basic_A2
+        $vm = GetWinVmConfig $dcCloudServiceName $servicesServerName2 $Basic_A2 $servicesAvailabilitySetName
 
         $vm | Set-AzureSubnet `
                 -SubnetNames $frontSubnetName |
@@ -32,6 +32,6 @@ function CreateQueue2()
 				    -ServiceName $dcCloudServiceName `
                     -WaitForBoot
 
-        RdpManageCert $dcCloudServiceName $queueServerName2
+        RdpManageCert $dcCloudServiceName $servicesServerName2
     }
 }

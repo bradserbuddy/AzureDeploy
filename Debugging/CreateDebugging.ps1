@@ -1,10 +1,10 @@
-﻿function CreateStaging()
+﻿function CreateDebugging()
 {
     $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $stagingServerName
 
     if ($vm -eq $null)
     {
-        $vm = GetWinVmConfig $dcCloudServiceName $stagingServerName $Basic_A2
+        $vm = GetWinVmConfig $dcCloudServiceName $debuggingServerName $Basic_A2 $debuggingAvailabilitySetName
 
         $vm | Set-AzureSubnet `
                 -SubnetNames $frontSubnetName |
@@ -12,6 +12,6 @@
 					-ServiceName $dcCloudServiceName `
                     -WaitForBoot
 
-        RdpManageCert $dcCloudServiceName $stagingServerName
+        RdpManageCert $dcCloudServiceName $debuggingServerName
     }
 }

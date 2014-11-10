@@ -1,10 +1,11 @@
-﻿function GetWinVmConfig($cloudServiceName, $serverName, $instanceSize)
+﻿function GetWinVmConfig($cloudServiceName, $serverName, $instanceSize, $availabilitySetName)
 {
     $vm = New-AzureVMConfig `
             -Name $serverName `
             -InstanceSize $instanceSize `
             -ImageName $winImageName `
             -MediaLocation "$storageAccountContainer$serverName.vhd" `
+            -AvailabilitySetName $availabilitySetName `
             -DiskLabel "OS" | 
             Add-AzureProvisioningConfig `
                 -Windows `
@@ -15,24 +16,24 @@
     return $vm
 }
 
-function CreateLinuxVmChecked($cloudServiceName, $serverName, $instanceSize)
+function CreateLinuxVmChecked($cloudServiceName, $serverName, $instanceSize, $availabilitySetName)
 {
     $vm = Get-AzureVM -ServiceName $cloudServiceName -Name $serverName
 
     if ($vm -eq $null)
     {
-        CreateLinuxVm $cloudServiceName $serverName $instanceSize
+        CreateLinuxVm $cloudServiceName $serverName $instanceSize $availabilitySetName
     }
 }
 
-function CreateLinuxVm($cloudServiceName, $serverName, $instanceSize)
+function CreateLinuxVm($cloudServiceName, $serverName, $instanceSize, $availabilitySetName)
 {
     New-AzureVMConfig `
         -Name $serverName `
         -InstanceSize $instanceSize `
         -ImageName $linuxImageName `
         -MediaLocation "$storageAccountContainer$serverName.vhd" `
-        -AvailabilitySetName $azureAvailabilitySetName `
+        -AvailabilitySetName $availabilitySetName `
         -DiskLabel "OS" | 
         Add-AzureProvisioningConfig `
             -Linux `

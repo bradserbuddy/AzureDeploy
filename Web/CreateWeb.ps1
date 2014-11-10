@@ -1,8 +1,13 @@
 ﻿function CreateWeb()
 {
+    Write-Status "Creating Web 1..."
     CreateWebVm $webServerName1
 
+    Write-Status "Creating Web 2..."
     CreateWebVm $webServerName2
+
+    Write-Status "Creating Web 3..."
+    CreateWebVm $webServerName3
 
     # deployment master\slave drive
     Get-AzureVM -ServiceName $dcCloudServiceName -Name $webServerName1 |
@@ -24,7 +29,7 @@ function CreateWebVm($serverName)
 
     if ($vm -eq $null)
     {
-        $vm = GetWinVmConfig $dcCloudServiceName $serverName $Standard_A2
+        $vm = GetWinVmConfig $dcCloudServiceName $serverName $Standard_A2 $webAvailabilitySetName
 
         $vm | Set-AzureSubnet `
                 -SubnetNames $frontSubnetName |

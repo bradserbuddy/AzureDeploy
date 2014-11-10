@@ -1,6 +1,8 @@
 ﻿function CreateMemcached()
 {
-    CreateLinuxVmChecked $dcCloudServiceName $memcachedServerName1 "Medium" #"Basic_A2"
+    Write-Status "Creating Memcached 1..."
+    CreateLinuxVmChecked $dcCloudServiceName $memcachedServerName1 $Basic_A2 $memcachedAvailabilitySetName
 
-    CreateLinuxVmChecked $dcCloudServiceName $memcachedServerName2 "Medium" #"Basic_A2"
+    Write-Status "Creating Memcached 2..."
+    CreateLinuxVmChecked $dcCloudServiceName $memcachedServerName2 $Basic_A2 $memcachedAvailabilitySetName
 }

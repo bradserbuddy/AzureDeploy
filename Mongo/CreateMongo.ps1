@@ -6,11 +6,14 @@
 
     #$sshPublicKey = New-AzureSSHKey -PublicKey –Fingerprint $sshCertificateFingerprint –Path $sshRemotePublicKeyPath
 
+    Write-Status "Creating Mongo 1..."
     CreateMongoVm $mongoServerName1 20322
 
+    Write-Status "Creating Mongo 2..."
     CreateMongoVm $mongoServerName2 20422
 
-    CreateLinuxVmChecked $dcCloudServiceName $mongoServerName3 $Basic_A1
+    Write-Status "Creating Mongo 3..."
+    CreateLinuxVmChecked $dcCloudServiceName $mongoServerName3 $Basic_A1 $mongoAvailabilitySetName
 }
 
 function CreateMongoVm($serverName, $publicPort)
@@ -21,7 +24,7 @@ function CreateMongoVm($serverName, $publicPort)
 
     if ($vm -eq $null)
     {
-        CreateLinuxVm $dcCloudServiceName $serverName $Basic_A3
+        CreateLinuxVm $dcCloudServiceName $serverName $Basic_A3 $mongoAvailabilitySetName
 
         # Can't chain because of -WaitForBoot
         Get-AzureVM -ServiceName $dcCloudServiceName -Name $serverName |

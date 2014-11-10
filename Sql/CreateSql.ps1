@@ -6,8 +6,10 @@
     #$sqlImageName = "SQLImage$storageAccountName"
     $sqlImageName = $winImageName
 
+    Write-Status "Creating Sql 1..."
     CreateSqlVm $sqlServerName1 1
 
+    Write-Status "Creating Sql 2..."
     CreateSqlVm $sqlServerName2 2
 }
 
@@ -22,7 +24,7 @@ function CreateSqlVm($sqlServerName, $publicPort)
             -InstanceSize $Basic_A3 `
             -ImageName $sqlImageName `
             -MediaLocation "$storageAccountContainer$sqlServerName.vhd" `
-            -AvailabilitySetName $azureAvailabilitySetName `
+            -AvailabilitySetName $sqlAvailabilitySetName `
             -HostCaching ReadOnly `
             -DiskLabel "OS" | 
             Add-AzureProvisioningConfig `

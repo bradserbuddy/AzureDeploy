@@ -18,11 +18,15 @@ function EnableSshFirewall($serverName)
     RunRemotely $vmAdminUser $vmAdminPassword $dcCloudServiceName $serverName $enableSshScriptBlock
 }
 
+
+Write-Status "Setting SSH Endpoints..."
+
 SetSshEndpoints $webServerName1   20022 
 SetSshEndpoints $webServerName2   20122
+SetSshEndpoints $webServerName3   20222
 
 SetSshEndpoints $dcServerName     21022
-SetSshEndpoints $queueServerName2 21122
+SetSshEndpoints $servicesServerName2 21122
 
 SetSshEndpoints $mongoServerName1 22022
 SetSshEndpoints $mongoServerName2 22122
@@ -32,8 +36,11 @@ SetSshEndpoints $memcachedServerName1 25022
 SetSshEndpoints $memcachedServerName2 25122
 
 
+Write-Status "Enable SSH Firewalls..."
+
 EnableSshFirewall $webServerName1
 EnableSshFirewall $webServerName2
+EnableSshFirewall $webServerName3
 
 EnableSshFirewall $dcServerName
-EnableSshFirewall $queueServerName2
+EnableSshFirewall $servicesServerName2

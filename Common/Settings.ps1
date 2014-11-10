@@ -1,27 +1,5 @@
 ﻿function Settings()
 {
-    # The below settings change depending on the region
-
-    $location = "China East"
-	$locationAbbrev = "CN-E"
-    $subscriptionName = "Enterprise Trial"
-    $publishSettingsName = "Enterprise Trial-6-13-2014-credentials"
-    $azureStorageUrlPath = "chinacloudapi.cn" # Non-China: windows.net
-    $azureCloudServiceUrlPath = "chinacloudapp.cn"  # Non-China: cloudapp.net
-
-    # The above settings change depending on the region
-
-    
-    # The below settings may change depending on the region
-
-    $Basic_A1 = "Small"
-    $Standard_A2 = "Medium"
-    $Basic_A2 = "Medium"
-    $Basic_A3 = "Large"
-
-    # The above settings may change depending on the region
-
-
     $delimiter = "-"
 	$clusterName = "B"
 	$capitalizedClusterName = $clusterName.ToUpperInvariant()
@@ -33,9 +11,17 @@
     $affinityGroupDescription = "$capitalizedClusterName $location Affinity Group"
     $affinityGroupLabel = "$affinityGroupName Affinity Group"
 
+    $webAvailabilitySetName = "Web"
+    $servicesAvailabilitySetName = "Services"
+    $memcachedAvailabilitySetName = "Memcached"
+    $mongoAvailabilitySetName = "Mongo"
+    $sqlAvailabilitySetName = "Sql"
+    $debuggingAvailabilitySetName = "Debug"
+
     $virtualNetworkName = "$capitalizedClusterName $location NET"
 
-    $storageAccountName = $clusterLocation.Replace($delimiter, "").ToLowerInvariant() # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+    # buddy is hard-coded here instead of the previous 'b' value because 'base' (asia east) is a reserved name in Azure Storage
+    $storageAccountName = "buddy$locationAbbrev".Replace($delimiter, "").ToLowerInvariant() # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
     $storageAccountLabel = "$capitalizedClusterName $location Storage Account"
     $storageAccountContainer = "https://$storageAccountName.blob.core.$azureStorageUrlPath/vhds/"
 
@@ -55,8 +41,9 @@
     $backSubnetName = "Back"
     $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
 
+    # $dcServerName works as services 1
     $dcServerName = "$locationAbbrev-10-Q1" # must be a valid DNS name (15 character limit)
-    $queueServerName2 = "$locationAbbrev-11-Q2"
+    $servicesServerName2 = "$locationAbbrev-11-Q2"
     $dcUsersPassword = "!Bubbajoe5312"
 
     $sqlDcUserName1 = "SQLSvc1"
@@ -69,6 +56,7 @@
 
     $webServerName1 = "$locationAbbrev-00-W1"
     $webServerName2 = "$locationAbbrev-01-W2"
+    $webServerName3 = "$locationAbbrev-02-W3"
 
     $mongoServerName1 = "$locationAbbrev-20-M1"
     $mongoServerName2 = "$locationAbbrev-21-M2"
@@ -77,7 +65,7 @@
     $memcachedServerName1 = "$locationAbbrev-50-C1"
     $memcachedServerName2 = "$locationAbbrev-51-C2"
 
-    $stagingServerName = "$locationAbbrev-60-S1"
+    $debuggingServerName = "$locationAbbrev-60-S1"
 
     $quorumServerName = "$locationAbbrev-30-QM1" # 15 character limit
 

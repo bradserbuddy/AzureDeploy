@@ -1,7 +1,7 @@
 ﻿function Auth()
 {
     # Ensure that we are not already logged in to Azure
-    Get-AzureAccount | ForEach-Object { Remove-AzureAccount $_.Name -Force }
+    Get-AzureAccount | ForEach-Object { Remove-AzureAccount $_.Id -Force }
 
     $subscription = Get-AzureSubscription | where {$_.SubscriptionName -like $subscriptionName}
 

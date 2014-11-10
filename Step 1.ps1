@@ -5,7 +5,7 @@ $DebugPreference = "SilentlyContinue"
 
 $workingDir = (Split-Path -parent $MyInvocation.MyCommand.Definition) + "\"
 
-. $workingDir"Common.ps1"
+. $workingDir"Common\Common.ps1"
 . Common
 
 . $workingDir"Common\RunRemotely.ps1"

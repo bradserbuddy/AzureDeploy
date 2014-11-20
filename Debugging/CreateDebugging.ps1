@@ -1,6 +1,6 @@
 ﻿function CreateDebugging()
 {
-    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $stagingServerName
+    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $debuggingServerName
 
     if ($vm -eq $null)
     {

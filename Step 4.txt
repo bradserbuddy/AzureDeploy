@@ -1,1 +1,0 @@
-Create databases on SQL 1, either manually, or by running the service directly on the SQL box.

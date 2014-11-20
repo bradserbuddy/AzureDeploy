@@ -21,7 +21,7 @@ function CreateSqlVm($sqlServerName, $publicPort)
     {
         New-AzureVMConfig `
             -Name $sqlServerName `
-            -InstanceSize $Basic_A3 `
+            -InstanceSize $Standard_A3 `
             -ImageName $sqlImageName `
             -MediaLocation "$storageAccountContainer$sqlServerName.vhd" `
             -AvailabilitySetName $sqlAvailabilitySetName `

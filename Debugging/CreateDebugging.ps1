@@ -1,17 +1,15 @@
 ﻿function CreateDebugging()
 {
-    $vm = Get-AzureVM -ServiceName $dcCloudServiceName -Name $debuggingServerName
+    $vm = Get-AzureVM -ServiceName $cloudServiceName -Name $debuggingServerName
 
     if ($vm -eq $null)
     {
-        $vm = GetWinVmConfig $dcCloudServiceName $debuggingServerName $Basic_A2 $debuggingAvailabilitySetName
+        $vm = GetWinVmConfig $cloudServiceName $debuggingServerName $Basic_A2 $debuggingAvailabilitySetName $frontEndSubnetName $debuggingServerIP
 
-        $vm | Set-AzureSubnet `
-                -SubnetNames $frontSubnetName |
-				New-AzureVM `
-					-ServiceName $dcCloudServiceName `
+        $vm | New-AzureVM `
+					-ServiceName $cloudServiceName `
                     -WaitForBoot
 
-        RdpManageCert $dcCloudServiceName $debuggingServerName
+        RdpManageCert $cloudServiceName $debuggingServerName
     }
 }

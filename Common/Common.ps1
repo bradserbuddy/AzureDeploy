@@ -13,13 +13,11 @@ function Common()
     . $workingDir"Common\Auth.ps1"
     Auth
 
-    . $workingDir"Common\AffinityGroup.ps1"
-    AffinityGroup
-
     . $workingDir"Common\Storage.ps1" #depends on Auth
     Storage
 
     # Image names are Azure Region-specific, so they have to be determined after Auth
-    $global:winImageName = (Get-AzureVMImage | where {$_.Label -like "Windows Server 2012 R2 Datacenter*" -and $_.ImageName -like "*-en.us-*"} | sort PublishedDate -Descending)[0].ImageName
-    $global:linuxImageName = (Get-AzureVMImage | where {$_.Label -like "Ubuntu Server 12.04.4 LTS" -and $_.ImageName -like "*-en-us-*"} | sort PublishedDate -Descending)[0].ImageName
+    $winImage = (Get-AzureVMImage | where {$_.ImageName -like $winVmImageName} | sort PublishedDate -Descending)[0];
+    $global:winImageName = $winImage.ImageName
+    $global:linuxImageName = (Get-AzureVMImage | where {$_.Label -like $linuxVmImageName -and $_.ImageName -like "*-en-us-*"} | sort PublishedDate -Descending)[0].ImageName
 }

@@ -2,10 +2,10 @@
 {
     # The below settings change depending on the region
 
-    $location = "East Asia"
-	$locationAbbrev = "AS-E"
-    $subscriptionName = "Windows Azure for BizSpark Plus" # China: "Enterprise Trial"
-    $publishSettingsName = "Windows Azure MSDN - Visual Studio Ultimate-Windows Azure for BizSpark Plus-4-11-2014-credentials"
+    $location = "West Europe"
+	$locationAbbrev = "EU-W"
+    $subscriptionName = "BizSpark Plus" # China: "Enterprise Trial"
+    $publishSettingsName = "BizSpark Plus-7-27-2015-credentials"
     $azureStorageUrlPath = "windows.net" # China: chinacloudapi.cn
     $azureCloudServiceUrlPath = "cloudapp.net"  # China: chinacloudapp.cn
 

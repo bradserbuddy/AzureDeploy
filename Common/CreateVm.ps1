@@ -1,4 +1,4 @@
-﻿function GetWinVmConfig($cloudServiceName, $serverName, $instanceSize, $availabilitySetName)
+﻿function GetWinVmConfig($cloudServiceName, $serverName, $instanceSize, $availabilitySetName, $subnetName, $IP)
 {
     $vm = New-AzureVMConfig `
             -Name $serverName `
@@ -11,22 +11,24 @@
                 -Windows `
                 -DisableAutomaticUpdates `
                 -AdminUserName $vmAdminUser `
-                -Password $vmAdminPassword
+                -Password $vmAdminPassword |
+                    Set-AzureSubnet $subnetName |
+                        Set-AzureStaticVNetIP -IPAddress $IP
                 
     return $vm
 }
 
-function CreateLinuxVmChecked($cloudServiceName, $serverName, $instanceSize, $availabilitySetName)
+function CreateLinuxVmChecked($cloudServiceName, $serverName, $instanceSize, $availabilitySetName, $subnetName, $IP)
 {
     $vm = Get-AzureVM -ServiceName $cloudServiceName -Name $serverName
 
     if ($vm -eq $null)
     {
-        CreateLinuxVm $cloudServiceName $serverName $instanceSize $availabilitySetName
+        CreateLinuxVm $cloudServiceName $serverName $instanceSize $availabilitySetName $subnetName $IP
     }
 }
 
-function CreateLinuxVm($cloudServiceName, $serverName, $instanceSize, $availabilitySetName)
+function CreateLinuxVm($cloudServiceName, $serverName, $instanceSize, $availabilitySetName, $subnetName, $IP)
 {
     New-AzureVMConfig `
         -Name $serverName `
@@ -40,9 +42,9 @@ function CreateLinuxVm($cloudServiceName, $serverName, $instanceSize, $availabil
             -LinuxUser $vmAdminUser `
             -Password $vmAdminPassword `
             -NoSSHEndpoint |
-            Set-AzureSubnet `
-                -SubnetNames $frontSubnetName |
-				New-AzureVM `
-					-ServiceName $cloudServiceName `
-                    -WaitForBoot
+            Set-AzureSubnet -SubnetNames $subnetName |
+                Set-AzureStaticVNetIP -IPAddress $IP |
+				    New-AzureVM `
+					    -ServiceName $cloudServiceName `
+                        -WaitForBoot
 }

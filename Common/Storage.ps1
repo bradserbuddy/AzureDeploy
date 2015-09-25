@@ -12,8 +12,8 @@
     {
         New-AzureStorageAccount `
             -StorageAccountName $storageAccountName `
-            -Label $storageAccountLabel `
-            -AffinityGroup $affinityGroupName
+            -Location $location `
+            -Label $storageAccountLabel
     }
 
     Set-AzureSubscription `

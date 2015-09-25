@@ -1,3 +1,0 @@
-scp /cygdrive/c/src/azuredeploy/Mongo/fdiskCommands.txt sysadmin@brad-dev-buddy.cloudapp.net:fdiskCommands.txt
-scp /cygdrive/c/src/azuredeploy/Mongo/InitializeDisks.sh sysadmin@brad-dev-buddy.cloudapp.net:InitializeDisks.sh
-scp /cygdrive/c/src/azuredeploy/Mongo/InstallMongo.sh sysadmin@brad-dev-buddy.cloudapp.net:InstallMongo.sh

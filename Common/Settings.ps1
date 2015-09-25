@@ -7,27 +7,23 @@
 
 	$clusterLocation = "$clusterPrefix$locationAbbrev"
 
-    $affinityGroupName = $clusterLocation
-    $affinityGroupDescription = "$capitalizedClusterName $location Affinity Group"
-    $affinityGroupLabel = "$affinityGroupName Affinity Group"
 
-    $webAvailabilitySetName = "Web"
-    $servicesAvailabilitySetName = "Services"
-    $memcachedAvailabilitySetName = "Memcached"
-    $mongoAvailabilitySetName = "Mongo"
-    $sqlAvailabilitySetName = "Sql"
-    $debuggingAvailabilitySetName = "Debug"
+    $webAvailabilitySetName = "$clusterLocation-Web"
+    $servicesAvailabilitySetName = "$clusterLocation-Services"
+    $memcachedAvailabilitySetName = "$clusterLocation-Memcached"
+    $debuggingAvailabilitySetName = "$clusterLocation-Debug"
 
-    $virtualNetworkName = "$capitalizedClusterName $location NET"
+    $virtualNetworkName = "Group $clusterLocation $clusterLocation-Net"
 
-    # buddy is hard-coded here instead of the previous 'b' value because 'base' (asia east) is a reserved name in Azure Storage
-    $storageAccountName = "buddy$locationAbbrev".Replace($delimiter, "").ToLowerInvariant() # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+    # buddy is hard-coded here instead of the previous 'b' value because 'base' (a.k.a. buddy asia east) is a reserved name in Azure Storage
+    $storageAccountName = "b$locationAbbrev".Replace($delimiter, "").ToLowerInvariant() # Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
     $storageAccountLabel = "$capitalizedClusterName $location Storage Account"
     $storageAccountContainer = "https://$storageAccountName.blob.core.$azureStorageUrlPath/vhds/"
 
-    $azureAvailabilitySetName = "$clusterLocation Availability Set"
-    $dcCloudServiceName = "$clusterLocation" 
-    $sqlCloudServiceName  = "$clusterLocation-SQL" 
+    $winVmImageName = "Buddy-WebFrontend-R6-os-2015-05-13"
+    $linuxVmImageName = "Ubuntu Server 12.04.4 LTS"
+
+    $cloudServiceName = "$clusterLocation-FE"
 
     $vmAdminUser = "sysadmin" 
     $vmAdminPassword = "!Bubbajoe5312"
@@ -37,52 +33,49 @@
     $FQDN = "$domainName.$($buddyplatformDomainName).com"
     $domainName = $domainName.ToUpperInvariant()
  	$domainNameAsPrefix = "$domainName\"
-    $frontSubnetName = "Front"
-    $backSubnetName = "Back"
-    $dnsSettings = New-AzureDns -Name "BuddyBackDNS" -IPAddress "10.10.0.4"
+    $frontEndSubnetName = "Frontend"
+    $backEndSubnetName = "Backend"
 
-    # $dcServerName works as services 1
-    $dcServerName = "$locationAbbrev-10-Q1" # must be a valid DNS name (15 character limit)
-    $servicesServerName2 = "$locationAbbrev-11-Q2"
-    $dcUsersPassword = "!Bubbajoe5312"
+    $addressTuple = "10.11."
+    $frontEndSubnetTuple = $addressTuple + "0."
+    $backEndSubnetTuple = $addressTuple + "1."
 
-    $sqlDcUserName1 = "SQLSvc1"
-    $sqlDcUserName2 = "SQLSvc2"
-    $sqlUserName1 = "$domainName\$sqlDcUserName1"
-    $sqlUserName2 = "$domainName\$sqlDcUserName2"
-    $installUserName = "Install"
-    $sqlServerAdminUserName = "sa"
-    $sqlServerAdminPassword = "sdbl,DTP98101" # Needs to be the same password as used in SQL Image creation
+    $addressSpaceAddressPrefix = $addressTuple + "0.0/8"
+    $frontEndSubnetAddressPrefix = $frontEndSubnetTuple + "0/24"
+    $backEndSubnetAddressPrefix = $backEndSubnetTuple + "0/24"
 
-    $webServerName1 = "$locationAbbrev-00-W1"
-    $webServerName2 = "$locationAbbrev-01-W2"
-    $webServerName3 = "$locationAbbrev-02-W3"
+    $servicesServerName0 = "$clusterLocation-50-Q0" # must be a valid DNS name (15 character limit)
+    $servicesServerName1 = "$clusterLocation-51-Q1"
 
-    $mongoServerName1 = "$locationAbbrev-20-M1"
-    $mongoServerName2 = "$locationAbbrev-21-M2"
-    $mongoServerName3 = "$locationAbbrev-22-M3"
+    $servicesServerIP0 = $backEndSubnetTuple + "50"
+    $servicesServerIP1 = $backEndSubnetTuple + "51"
 
-    $memcachedServerName1 = "$locationAbbrev-50-C1"
-    $memcachedServerName2 = "$locationAbbrev-51-C2"
+    $webServerName0 = "$clusterLocation-00-W0"
+    $webServerName1 = "$clusterLocation-01-W1"
+    $webServerName2 = "$clusterLocation-02-W2"
+    $webServerName3 = "$clusterLocation-03-W3"
+    $webServerName4 = "$clusterLocation-04-W4"
+    $webServerName5 = "$clusterLocation-05-W5"
+    $webServerName6 = "$clusterLocation-06-W6"
+    $webServerName7 = "$clusterLocation-07-W7"
+    $webServerName8 = "$clusterLocation-08-W8"
 
-    $debuggingServerName = "$locationAbbrev-60-S1"
+    $webServerIP0 = $frontEndSubnetTuple + "100" # .0 through .3 are reserved
+    $webServerIP1 = $frontEndSubnetTuple + "101"
+    $webServerIP2 = $frontEndSubnetTuple + "102"
+    $webServerIP3 = $frontEndSubnetTuple + "103"
+    $webServerIP4 = $frontEndSubnetTuple + "104"
+    $webServerIP5 = $frontEndSubnetTuple + "105"
+    $webServerIP6 = $frontEndSubnetTuple + "106"
+    $webServerIP7 = $frontEndSubnetTuple + "107"
+    $webServerIP8 = $frontEndSubnetTuple + "108"
 
-    $quorumServerName = "$locationAbbrev-30-QM1" # 15 character limit
+    $memcachedServerName0 = "$clusterLocation-70-C0"
+    $memcachedServerName1 = "$clusterLocation-71-C1"
 
-    $sqlServerName1 = "$locationAbbrev-40-SQL1"
-    $sqlServerName2 = "$locationAbbrev-41-SQL2"
+    $memcachedServerIP0 = $frontEndSubnetTuple + "70"
+    $memcachedServerIP1 = $frontEndSubnetTuple + "71"
 
-    $sqlAvailabilityGroupName = "$clusterLocation Availability Group"
-    $sqlClusterName = "$locationAbbrev-SC" # must be a valid DNS name (15 character limit)?
-    $sqlListenerName = "$locationAbbrev-L" # must be a valid DNS name (15 character limit)
-    $endpointName = "ListenerEP" # 15 character limit
-    $lbSetName = "$endpointName-LB" # from ConfigureAGListenerCloudOnly.ps1
-
-    $sshExePath = "C:\Program Files (x86)\git\bin\ssh.exe"
-    $scpExePath = "C:\Program Files (x86)\git\bin\scp.exe"
-    $sshLocalCertificatePath = "C:\src\bran-the-builder\deploy_key.cer"
-    $sshCertificateFingerprint = "‎730dcef947d1ec2c31e3ea4b3f291dfee3be00fd"
-    $sshRemotePublicKeyPath = "/home/sysadmin/.ssh/authorized_keys"
-    $sshLocalPublicKeyPath = "C:\src\bran-the-builder\deploy_key.rsa.pub"
-    $sshLocalPrivateKeyPath = "C:\src\bran-the-builder\deploy_key.rsa"
+    $debuggingServerName = "$clusterLocation-90-D0"
+    $debuggingServerIP = $frontEndSubnetTuple + "90"
 }
